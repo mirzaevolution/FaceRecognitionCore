@@ -7,7 +7,6 @@ namespace FaceRecognition.DataLayer.Models
         private byte[] _sampleImage;
         private int _userId;
         private User _user;
-        private History _history;
 
         public int ID
         {
@@ -60,18 +59,6 @@ namespace FaceRecognition.DataLayer.Models
                 {
                     _user = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(User)));
-                }
-            }
-        }
-        public virtual History History
-        {
-            get { return _history; }
-            set
-            {
-                if(_history!=value)
-                {
-                    _history = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(History)));
                 }
             }
         }
