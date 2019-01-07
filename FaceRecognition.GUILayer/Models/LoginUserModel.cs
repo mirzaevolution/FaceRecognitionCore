@@ -1,11 +1,40 @@
-﻿using PropertyChanged;
+﻿
+using System.ComponentModel;
+
 namespace FaceRecognition.GUILayer.Models
 {
-
-    [AddINotifyPropertyChangedInterface]
-    public class LoginUserModel
+    public class LoginUserModel:INotifyPropertyChanged
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        private string _username, _password;
+
+        public string UserName
+        {
+            get { return _username; }
+            set
+            {
+                if (_username != value)
+                {
+                    _username = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UserName)));
+                }
+            }
+        }
+        public string Password
+        {
+            get
+            {
+                return _password;
+            }
+            set
+            {
+                if (_password != value)
+                {
+                    _password = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Password)));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

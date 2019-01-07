@@ -25,5 +25,14 @@ namespace FaceRecognition.GUILayer
         {
             InitializeComponent();
         }
+
+        private void ResizeScreenHandler(object sender, Tuple<double,double> e)
+        {
+            
+            this.Width = e.Item1;
+            this.Height = e.Item2;
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+        
     }
 }

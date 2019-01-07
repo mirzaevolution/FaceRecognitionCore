@@ -1,12 +1,66 @@
-﻿<UserControl x:Class="FaceRecognition.GUILayer.Training.TrainingView"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:wpf="clr-namespace:WebEye.Controls.Wpf;assembly=WebEye.Controls.Wpf.WebCameraControl"
+             xmlns:control="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:local="clr-namespace:FaceRecognition.GUILayer.Training"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" x:Class="FaceRecognition.GUILayer.Training.TrainingView"
+             mc:Ignorable="d" d:DesignHeight="708" d:DesignWidth="848.4">
+    <i:Interaction.Triggers>
+        <i:EventTrigger>
+            <ei:CallMethodAction TargetObject="{Binding}" MethodName="LoadSamples"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="GridDataRepo" DataContext="{Binding Repository}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <wpf:WebCameraControl x:Name="WebCamCoreControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <StackPanel Grid.Row="1">
+                    <ComboBox x:Name="ComboBoxDevices" DisplayMemberPath="Name" Margin="10"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button x:Name="ButtonInitialize" Margin="3" Width="80" Click="ButtonInitializeHandler"
+                            Content="Initialize" control:ButtonHelper.CornerRadius="10"
+                            HorizontalAlignment="Center" BorderBrush="Red"/>
+                        <Button x:Name="ButtonCapture" Margin="3" Width="80" Click="ButtonCaptureHandler"
+                            Content="Capture" control:ButtonHelper.CornerRadius="10"
+                            HorizontalAlignment="Center" BorderBrush="Red"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            <DockPanel  Grid.Column="1" Margin="3">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="7,10,7.4,0" >
+                    <Button Content="Save" Command="{Binding DataContext.SaveCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Height="30"
+                            Width="80" Margin="4" control:ButtonHelper.CornerRadius="10" BorderBrush="Red"/>
+                    <Button Content="Cancel" Command="{Binding DataContext.CancelCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Height="30"
+                            Width="80" Margin="4" control:ButtonHelper.CornerRadius="10" BorderBrush="Red"/>
+                </StackPanel>
+                <Image Source="{Binding Image}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,32.6"/>
+            </DockPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <ListBox ItemsSource="{Binding Repositories}" Margin="10">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding Image}" Margin="5" Height="40" Width="80"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                
+            </ListBox>
+        </Grid>
     </Grid>
 </UserControl>

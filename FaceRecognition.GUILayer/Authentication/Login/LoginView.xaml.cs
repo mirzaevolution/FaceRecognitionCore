@@ -29,7 +29,7 @@ namespace FaceRecognition.GUILayer.Authentication.Login
 
         private void PasswordBoxFieldChanged(object sender, RoutedEventArgs e)
         {
-            ((LoginUserModel)DataContext).Password = PasswordBoxField.Password;
+            ((LoginViewModel)DataContext).User.Password = PasswordBoxField.Password;
         }
     }
 }

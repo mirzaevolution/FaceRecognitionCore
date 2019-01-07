@@ -7,8 +7,8 @@
         xmlns:local="clr-namespace:FaceRecognition.GUILayer.Authentication"
         xmlns:login="clr-namespace:FaceRecognition.GUILayer.Authentication.Login"
         xmlns:register="clr-namespace:FaceRecognition.GUILayer.Authentication.Register"
-        mc:Ignorable="d"
-        Title="Authentication" Height="300" Width="300">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" Icon="/Resources/Icons/main.ico"
+        Title="Authentication" Height="310" Width="430" ResizeMode="CanMinimize">
     <controls:MetroWindow.Resources>
         <DataTemplate DataType="{x:Type login:LoginViewModel}">
             <login:LoginView/>
@@ -18,7 +18,7 @@
         </DataTemplate>
     </controls:MetroWindow.Resources>
     <controls:MetroWindow.DataContext>
-        <local:AuthenticationViewModel/>
+        <local:AuthenticationViewModel ExitAppRequested="ExitAppHandler" AuthenticationFailed="AuthenticationFailedHandler"/>
     </controls:MetroWindow.DataContext>
     <Grid>
         <ContentControl Content="{Binding CurrentView}"/>

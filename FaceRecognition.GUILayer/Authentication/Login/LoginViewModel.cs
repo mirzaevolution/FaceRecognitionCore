@@ -3,31 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 using FaceRecognition.DataLayer.Models;
 using FaceRecognition.GUILayer.Models;
-using PropertyChanged;
 using MirzaCryptoHelpers.Hashings;
 using MirzaCryptoHelpers.Common;
 using FaceRecognition.DataLayer.Context;
 
 namespace FaceRecognition.GUILayer.Authentication.Login
 {
-    [AddINotifyPropertyChangedInterface]
-    public class LoginViewModel
+    
+    public class LoginViewModel:INotifyPropertyChanged
     {
-        public event EventHandler<bool> GoToMainViewRequested;
         public event EventHandler GoToRegisterViewRequested;
+        public event EventHandler<LoggedUserModel> GoToMainViewRequested;
         public event EventHandler ExitRequested;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public LoginUserModel User { get; set; }
-        public RelayCommand<LoginUserModel> LoginCommand { get; set; }
+        private LoginUserModel _user = new LoginUserModel();
+
+        public LoginUserModel User
+        {
+            get { return _user; }
+            set
+            {
+                _user = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(User)));
+            }
+        }
+        public RelayCommand LoginCommand { get; set; }
         public RelayCommand ExitCommand { get; set; }
         public RelayCommand GoToRegisterCommand { get; set; }
 
         public LoginViewModel()
         {
-            User = new LoginUserModel();
-            LoginCommand = new RelayCommand<LoginUserModel>(LoginHandler, CanLoginHandler);
+            LoginCommand = new RelayCommand(LoginHandler, CanLoginHandler);
             ExitCommand = new RelayCommand(ExitHandler);
             GoToRegisterCommand = new RelayCommand(GoToRegisterHandler);
         }
@@ -35,21 +45,40 @@ namespace FaceRecognition.GUILayer.Authentication.Login
         
 
         #region Handlers
-        public bool CanLoginHandler(LoginUserModel user)
+        public bool CanLoginHandler()
         {
-            return user != null && !string.IsNullOrEmpty(user.UserName) && !string.IsNullOrEmpty(user.Password);
+            return _user != null && !string.IsNullOrEmpty(_user.UserName) && !string.IsNullOrEmpty(_user.Password);
         }
-        public void LoginHandler(LoginUserModel user)
+        public async void LoginHandler()
         {
             try
             {
-                user.UserName = user.UserName.Trim();
-                string hashedPassword = new SHA512Crypto().GetHashBase64String(user.Password);
-                using(CoreContext context = new CoreContext())
+                _user.UserName = _user.UserName.Trim();
+                string hashedPassword = new SHA512Crypto().GetHashBase64String(_user.Password);
+                LoggedUserModel loggedUser = new LoggedUserModel();
+                
+                await Task.Run(() =>
                 {
-                    bool exists = context.Users.Any(x => x.UserName.Equals(user.UserName,StringComparison.InvariantCultureIgnoreCase) && x.PasswordHash.Equals(hashedPassword));
-                    GoToMainViewRequested?.Invoke(this, exists);
-                }
+
+                    using (CoreContext context = new CoreContext())
+                    {
+                        User user = context.Users.FirstOrDefault(x => x.UserName.Equals(_user.UserName, StringComparison.InvariantCultureIgnoreCase) && x.PasswordHash.Equals(hashedPassword));
+                        if (user != null)
+                        {
+                            loggedUser.ID = user.ID;
+                            loggedUser.UserName = user.UserName;
+                            loggedUser.FullName = user.FullName;
+                            loggedUser.Email = user.Email;
+                            loggedUser.IsAuthenticated = true;
+                        }
+                        else
+                        {
+                            loggedUser.IsAuthenticated = true;
+                        }
+                    }
+                });
+                 
+                GoToMainViewRequested?.Invoke(this, loggedUser);
             }
             catch(Exception ex)
             {

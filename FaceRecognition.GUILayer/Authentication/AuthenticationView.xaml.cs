@@ -1,4 +1,6 @@
-﻿using MahApps.Metro.Controls;
+﻿using FaceRecognition.GUILayer.Models;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
 namespace FaceRecognition.GUILayer.Authentication
 {
     /// <summary>
@@ -23,6 +24,22 @@ namespace FaceRecognition.GUILayer.Authentication
         public AuthenticationView()
         {
             InitializeComponent();
+        }
+        
+
+        private async void AuthenticationFailedHandler(object sender, EventArgs e)
+        {
+            await this.ShowMessageAsync("Loggin Failed", "Your username or password is invalid.");
+        }
+
+        private void ExitAppHandler(object sender, LoggedUserModel e)
+        {
+            if (e!=null)
+            {
+                Global.LoggedUser = e;
+                new MainWindow().Show();
+                this.Close();
+            }
         }
     }
 }

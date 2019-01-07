@@ -24,5 +24,11 @@ namespace FaceRecognition.GUILayer.Authentication.Register
         {
             InitializeComponent();
         }
+
+        private void PasswordBoxFieldChanged(object sender, RoutedEventArgs e)
+        {
+            ((RegisterViewModel)DataContext).UserRegisterModel.Password = PasswordBoxField.Password;
+
+        }
     }
 }

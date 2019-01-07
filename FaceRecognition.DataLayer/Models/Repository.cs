@@ -1,13 +1,81 @@
-﻿using PropertyChanged;
+﻿using System.ComponentModel;
 namespace FaceRecognition.DataLayer.Models
 {
-    [AddINotifyPropertyChangedInterface]
-    public class Repository
+    public class Repository:INotifyPropertyChanged
     {
-        public int ID { get; set; }
-        public byte[] SampleImage { get; set; }
-        public int UserID { get; set; }
-        public virtual User User { get; set; }
-        public virtual History History { get; set; }
+        private int _id;
+        private byte[] _sampleImage;
+        private int _userId;
+        private User _user;
+        private History _history;
+
+        public int ID
+        {
+            get { return _id; }
+            set
+            {
+                if (_id != value)
+                {
+                    _id = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ID)));
+                }
+            }
+        }
+        public byte[] SampleImage
+        {
+            get
+            {
+                return _sampleImage;
+            }
+            set
+            {
+                if(_sampleImage!=value)
+                {
+                    _sampleImage = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SampleImage)));
+                }
+            }
+        }
+        public int UserID
+        {
+            get
+            {
+                return _userId;
+            }
+            set
+            {
+                if(_userId!=value)
+                {
+                    _userId = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UserID)));
+                }
+            }
+        }
+        public virtual User User
+        {
+            get { return _user; }
+            set
+            {
+                if(_user!=value)
+                {
+                    _user = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(User)));
+                }
+            }
+        }
+        public virtual History History
+        {
+            get { return _history; }
+            set
+            {
+                if(_history!=value)
+                {
+                    _history = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(History)));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
