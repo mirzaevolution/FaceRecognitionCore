@@ -1,5 +1,6 @@
 ﻿using FaceRecognition.GUILayer.Home;
 using FaceRecognition.GUILayer.Identification;
+using FaceRecognition.GUILayer.PreviewFull;
 using FaceRecognition.GUILayer.Training;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace FaceRecognition.GUILayer
 {
@@ -17,7 +19,8 @@ namespace FaceRecognition.GUILayer
         private IdentificationViewModel _identificationViewModel = new IdentificationViewModel();
         private HomeViewModel _homeViewModel = new HomeViewModel();
         public event EventHandler<Tuple<double, double>> ResizeScreenRequested;
-
+        public event Action<string> ErrorOccured;
+        
         public object CurrentView
         {
             get { return _currentView; }
@@ -36,8 +39,22 @@ namespace FaceRecognition.GUILayer
             _homeViewModel.GoToIdentificationViewRequested += GoToIdentificationHandler;
             _homeViewModel.GoToTrainingViewRequested += GoToTrainingHandler;
             _trainingViewModel.BackToMainRequested += BackToMainHandler;
+            _trainingViewModel.PreviewImageRequested += PreviewImageHandler;
+            _trainingViewModel.ErrorOccured += ErrorInfoHandler;
             CurrentView = _homeViewModel;
 
+        }
+
+        private void ErrorInfoHandler(string error)
+        {
+            ErrorOccured?.Invoke(error);   
+        }
+
+        private void PreviewImageHandler(object sender, BitmapSource e)
+        {
+            PreviewView previewView = new PreviewView();
+            previewView.SetImage(e);
+            previewView.ShowDialog();
         }
 
         private void BackToMainHandler(object sender, EventArgs e)
@@ -49,7 +66,7 @@ namespace FaceRecognition.GUILayer
 
         private void GoToTrainingHandler(object sender, EventArgs e)
         {
-            ResizeScreenRequested?.Invoke(this, new Tuple<double, double>(848.4, 708));
+            ResizeScreenRequested?.Invoke(this, new Tuple<double, double>(694.487, 586.88));
 
             CurrentView = _trainingViewModel;
         }

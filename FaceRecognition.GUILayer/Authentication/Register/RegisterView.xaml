@@ -22,16 +22,24 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
 
             </Grid.RowDefinitions>
-            <Image Source="/Resources/Icons/user_add.png" Height="50" Width="50" Margin="10" VerticalAlignment="Top" Grid.RowSpan="4" OpacityMask="White" />
+            <Image Source="/Resources/Icons/user_add.png" Height="60" Width="60" Margin="10" VerticalAlignment="Top" Grid.RowSpan="4" OpacityMask="White" />
             
-            <TextBox Text="{Binding FullName,UpdateSourceTrigger=PropertyChanged}" control:TextBoxHelper.Watermark="Enter your Name" control:TextBoxHelper.ClearTextButton="True" Grid.Column="1" Margin="0,4,0,4" control:TextBoxHelper.HasText="False"/>
-            <TextBox Text="{Binding UserName,UpdateSourceTrigger=PropertyChanged}" control:TextBoxHelper.Watermark="Enter your User Name" control:TextBoxHelper.ClearTextButton="True" Grid.Row="1" Grid.Column="1" Margin="0,4,0,4" control:TextBoxHelper.HasText="False"/>
-            <PasswordBox Name="PasswordBoxField" PasswordChanged="PasswordBoxFieldChanged" control:TextBoxHelper.Watermark="Enter your Password" control:TextBoxHelper.ClearTextButton="True" Grid.Column="1" Grid.Row="2" Margin="0,4,0,4"/>
-            <TextBox Text="{Binding Email,UpdateSourceTrigger=PropertyChanged}" control:TextBoxHelper.Watermark="Enter your Email" control:TextBoxHelper.ClearTextButton="True" Grid.Row="3" Grid.Column="1" Margin="0,4,0,4" control:TextBoxHelper.HasText="False"/>
+            <TextBox Text="{Binding FullName,UpdateSourceTrigger=PropertyChanged}" control:TextBoxHelper.Watermark="Enter your Name" control:TextBoxHelper.ClearTextButton="True" Grid.Column="1" Margin="0,4,0,4" 
+                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsEnabled}"/>
+            <TextBox Text="{Binding UserName,UpdateSourceTrigger=PropertyChanged}" control:TextBoxHelper.Watermark="Enter your User Name" control:TextBoxHelper.ClearTextButton="True" Grid.Row="1" Grid.Column="1" Margin="0,4,0,4" 
+                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsEnabled}"/>
+            <PasswordBox Name="PasswordBoxField" PasswordChanged="PasswordBoxFieldChanged" control:TextBoxHelper.Watermark="Enter your Password" control:TextBoxHelper.ClearTextButton="True" Grid.Column="1" Grid.Row="2" Margin="0,4,0,4"
+                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsEnabled}"/>
+            <TextBox Text="{Binding Email,UpdateSourceTrigger=PropertyChanged}" control:TextBoxHelper.Watermark="Enter your Email" control:TextBoxHelper.ClearTextButton="True" Grid.Row="3" Grid.Column="1" Margin="0,4,0,4" 
+                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsEnabled}"/>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1" Margin="5,5,0,0" HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal" Grid.Row="4" 
+                        Grid.Column="1" Margin="5,5,0,0" 
+                        HorizontalAlignment="Right"
+                        IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsEnabled}">
                 <Button Content="Register" Width="80" 
                         Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.RegisterCommand}"
                         control:ButtonHelper.CornerRadius="10" Margin="2" BorderBrush="Red" BorderThickness="1.5"/>
@@ -39,7 +47,10 @@
                         Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ExitCommand}"
                         control:ButtonHelper.CornerRadius="10" Margin="2,2,2,0" BorderBrush="Red" BorderThickness="1.5"/>
             </StackPanel>
-            <TextBlock Grid.Row="5" Grid.ColumnSpan="2" Margin="20,20,5,5">
+            <control:MetroProgressBar IsIndeterminate="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsLoading}" 
+                                      Grid.Row="5" Grid.ColumnSpan="2" Background="Transparent"
+                                      HorizontalContentAlignment="Center" Margin="10"/>
+            <TextBlock Grid.Row="6" Grid.ColumnSpan="2" Margin="20,0,5,5">
                 Already have an account? <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.GoToLoginCommand}">Login!</Hyperlink>
             </TextBlock>
         </Grid>

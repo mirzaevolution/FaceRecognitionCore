@@ -30,3 +30,14 @@ D:\Projects\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\EntityFramew
 D:\Projects\FaceRecognitionCore\FaceRecognition.DataLayer\obj\Debug\FaceRecognition.DataLayer.dll
 D:\Projects\FaceRecognitionCore\FaceRecognition.DataLayer\obj\Debug\FaceRecognition.DataLayer.pdb
 D:\Projects\FaceRecognitionCore\FaceRecognition.DataLayer\obj\Debug\FaceRecognition.DataLayer.csprojResolveAssemblyReference.cache
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\FaceRecognition.DataLayer.dll.config
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\FaceRecognition.DataLayer.dll
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\FaceRecognition.DataLayer.pdb
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\EntityFramework.dll
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\EntityFramework.SqlServer.dll
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\EntityFramework.xml
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\EntityFramework.SqlServer.xml
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\obj\Debug\FaceRecognition.DataLayer.csproj.CoreCompileInputs.cache
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\obj\Debug\FaceRecognition.DataLayer.dll
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\obj\Debug\FaceRecognition.DataLayer.pdb
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\obj\Debug\FaceRecognition.DataLayer.csprojResolveAssemblyReference.cache

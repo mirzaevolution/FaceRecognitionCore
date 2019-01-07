@@ -14,6 +14,7 @@ namespace FaceRecognition.GUILayer.Authentication.Register
     public class RegisterViewModel : INotifyPropertyChanged
     {
         private RegisterModel _userRegisterModel = new RegisterModel();
+        private bool _isLoading, _isEnabled;
 
         public RegisterModel UserRegisterModel
         {
@@ -32,13 +33,40 @@ namespace FaceRecognition.GUILayer.Authentication.Register
         public event EventHandler<LoggedUserModel> GoToMainViewRequested;
         public event EventHandler ExitRequested;
         public event PropertyChangedEventHandler PropertyChanged;
+        public event Action<string> ErrorOccured;
+
 
         public RelayCommand RegisterCommand { get; set; }       
         public RelayCommand ExitCommand { get; set; }
         public RelayCommand GoToLoginCommand { get; set; }
-
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set
+            {
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+                }
+            }
+        }
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsEnabled)));
+                }
+            }
+        }
         public RegisterViewModel()
         {
+            IsEnabled = true;
+            IsLoading = false;
             RegisterCommand = new RelayCommand(RegisterHandler, CanRegisterHandler);
             ExitCommand = new RelayCommand(ExitHandller);
             GoToLoginCommand = new RelayCommand(GoToLoginHandler);
@@ -66,8 +94,11 @@ namespace FaceRecognition.GUILayer.Authentication.Register
         private async void RegisterHandler()
         {
             bool success = true;
+            IsLoading = true;
+            IsEnabled = false;
             try
             {
+                string error = string.Empty;
                 LoggedUserModel loggedUser = new LoggedUserModel();
                 await Task.Run(() =>
                 {
@@ -100,9 +131,18 @@ namespace FaceRecognition.GUILayer.Authentication.Register
                             }
                         }
                     }
-                    catch { }
+                    catch(Exception ex) { error = ex.Message; }
                 });
-                GoToMainViewRequested?.Invoke(this, loggedUser);
+                IsLoading = false;
+                IsEnabled = true;
+                if (!string.IsNullOrEmpty(error))
+                {
+                    ErrorOccured?.Invoke(error);
+                }
+                else
+                {
+                    GoToMainViewRequested?.Invoke(this, loggedUser);
+                }
 
             }
             catch (Exception ex)

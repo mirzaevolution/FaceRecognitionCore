@@ -19,7 +19,7 @@ namespace FaceRecognition.GUILayer.Authentication
         public event EventHandler<LoggedUserModel> ExitAppRequested;
         public event EventHandler AuthenticationFailed;
         public event PropertyChangedEventHandler PropertyChanged;
-
+        public event Action<string> ErrorOccured;
         public object CurrentView
         {
             get { return _currentView; }
@@ -38,10 +38,17 @@ namespace FaceRecognition.GUILayer.Authentication
             _loginViewModel.GoToMainViewRequested += GoToMainViewHandler;
             _loginViewModel.GoToRegisterViewRequested += GoToRegisterHandler;
             _loginViewModel.ExitRequested += ExitHandler;
+            _loginViewModel.ErrorOccured += ErrorThrownHandler;
             _registerViewModel.GoToMainViewRequested += GoToMainViewHandler;
             _registerViewModel.GoToLoginViewRequested += GoToLoginHandler;
             _registerViewModel.ExitRequested += ExitHandler;
+            _registerViewModel.ErrorOccured += ErrorThrownHandler;
             CurrentView = _loginViewModel;
+        }
+
+        private void ErrorThrownHandler(string error)
+        {
+            ErrorOccured?.Invoke(error);
         }
 
         private void ExitHandler(object sender, EventArgs e)

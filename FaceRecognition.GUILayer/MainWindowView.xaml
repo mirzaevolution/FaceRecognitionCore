@@ -17,14 +17,14 @@
             <home:HomeView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type training:TrainingViewModel}">
-            <training:TrainingView/>
+            <training:TrainingView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type identification:IdentificationViewModel}">
             <identification:IdentificationView/>
         </DataTemplate>
     </control:MetroWindow.Resources>
     <control:MetroWindow.DataContext>
-        <local:MainWindowViewModel ResizeScreenRequested="ResizeScreenHandler"/>
+        <local:MainWindowViewModel ResizeScreenRequested="ResizeScreenHandler" ErrorOccured="ErrorHandler"/>
     </control:MetroWindow.DataContext>
     <Grid>
         <ContentControl Content="{Binding CurrentView}"/>

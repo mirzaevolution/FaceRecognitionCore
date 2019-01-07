@@ -1,4 +1,5 @@
 ﻿using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,13 @@ namespace FaceRecognition.GUILayer
             this.Height = e.Item2;
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
-        
+
+        private void ErrorHandler(string error)
+        {
+            if (!string.IsNullOrEmpty(error))
+            {
+                MessageBox.Show(error, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }

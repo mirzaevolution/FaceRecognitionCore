@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\obj\Debug\
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.GUILayer\obj\Debug\
 FaceRecognition.GUILayer
 none
 false
 DEBUG;TRACE
-D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\App.xaml
-988694796
+D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.GUILayer\App.xaml
+10-1267256173
 
-351989235434
-281513885338
-Authentication\AuthenticationView.xaml;Authentication\Login\LoginView.xaml;Authentication\Register\RegisterView.xaml;Home\HomeView.xaml;Identification\IdentificationView.xaml;MainWindowView.xaml;Resources\Icons.xaml;Resources\IconsNonShared.xaml;Training\TrainingView.xaml;
+36639785282
+282092746090
+Authentication\AuthenticationView.xaml;Authentication\Login\LoginView.xaml;Authentication\Register\RegisterView.xaml;Home\HomeView.xaml;Identification\IdentificationView.xaml;MainWindowView.xaml;PreviewFull\PreviewView.xaml;Resources\Icons.xaml;Resources\IconsNonShared.xaml;Training\TrainingView.xaml;
 
 True
 

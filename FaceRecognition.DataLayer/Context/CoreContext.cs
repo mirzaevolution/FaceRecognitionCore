@@ -52,8 +52,6 @@ namespace FaceRecognition.DataLayer.Context
 
             var historyEntity = modelBuilder.Entity<History>();
             historyEntity.HasKey(x => x.ID);
-            historyEntity.HasRequired(x => x.Repository)
-                .WithRequiredDependent(x => x.History);
             historyEntity.ToTable("History", "fr");
 
             

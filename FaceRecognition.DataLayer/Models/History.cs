@@ -6,10 +6,10 @@ namespace FaceRecognition.DataLayer.Models
     {
         private int _id;
         private byte[] _capturedImage;
-        private int _userId;
-        private int _repoId;
+        private byte[] _sampleImage;
+        private int? _userId;
+        private int? _repoId;
         private User _user;
-        private Repository _repository;
 
         public int ID
         {
@@ -35,7 +35,19 @@ namespace FaceRecognition.DataLayer.Models
                 }
             }
         }
-        public int UserID
+        public byte[] SampleImage
+        {
+            get { return _sampleImage; }
+            set
+            {
+                if (_sampleImage != value)
+                {
+                    _sampleImage = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SampleImage)));
+                }
+            }
+        }
+        public int? UserID
         {
             get { return _userId; }
             set
@@ -47,18 +59,7 @@ namespace FaceRecognition.DataLayer.Models
                 }
             }
         }
-        public int RepositoryID
-        {
-            get { return _repoId; }
-            set
-            {
-                if (_repoId != value)
-                {
-                    _repoId = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RepositoryID)));
-                }
-            }
-        }
+        
         public virtual User User
         {
             get { return _user; }
@@ -68,18 +69,6 @@ namespace FaceRecognition.DataLayer.Models
                 {
                     _user = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(User)));
-                }
-            }
-        }
-        public virtual Repository Repository
-        {
-            get { return _repository; }
-            set
-            {
-                if (_repository != value)
-                {
-                    _repository = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Repository)));
                 }
             }
         }

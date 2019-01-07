@@ -7,7 +7,9 @@
              xmlns:local="clr-namespace:FaceRecognition.GUILayer.Authentication.Login"
              mc:Ignorable="d" d:DesignHeight="200" d:DesignWidth="285.923">
     <Grid>
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,20,5" DataContext="{Binding User}">
+        <Grid HorizontalAlignment="Stretch" 
+              VerticalAlignment="Center" Margin="5,5,20,5" 
+              DataContext="{Binding User}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
@@ -17,12 +19,25 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
 
             </Grid.RowDefinitions>
-            <Image Source="/Resources/Icons/shield.png" Height="34" Width="44" Margin="10" VerticalAlignment="Top" Grid.RowSpan="4"/>
-            <TextBox Text="{Binding UserName,UpdateSourceTrigger=PropertyChanged}" control:TextBoxHelper.Watermark="Enter your User Name" control:TextBoxHelper.ClearTextButton="True" Grid.Column="1" Margin="0,4,0,4" control:TextBoxHelper.HasText="False"/>
-            <PasswordBox Name="PasswordBoxField" PasswordChanged="PasswordBoxFieldChanged" control:TextBoxHelper.Watermark="Enter your Password" control:TextBoxHelper.ClearTextButton="True" Grid.Column="1" Grid.Row="1" Margin="0,4,0,4"/>
-            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Margin="5,5,0,0" HorizontalAlignment="Right">
+            <Image Source="/Resources/Icons/shield.png" Height="45" Width="55" Margin="10" VerticalAlignment="Top" Grid.RowSpan="4"/>
+            <TextBox Text="{Binding UserName,UpdateSourceTrigger=PropertyChanged}" 
+                     control:TextBoxHelper.Watermark="Enter your User Name" 
+                     control:TextBoxHelper.ClearTextButton="True" 
+                     Grid.Column="1" Margin="0,4,0,4" 
+                     control:TextBoxHelper.HasText="False" IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsEnabled}">
+             
+            </TextBox>
+            <PasswordBox Name="PasswordBoxField" PasswordChanged="PasswordBoxFieldChanged" 
+                         control:TextBoxHelper.Watermark="Enter your Password" 
+                         control:TextBoxHelper.ClearTextButton="True" 
+                         Grid.Column="1" Grid.Row="1" Margin="0,4,0,4" IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsEnabled}"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" 
+                        Grid.Column="1" Margin="5,5,0,0" 
+                        HorizontalAlignment="Right"
+                        IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsEnabled}">
                 <Button Content="Login" Width="80" 
                         Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.LoginCommand}"
                         control:ButtonHelper.CornerRadius="10" Margin="2" BorderBrush="Red" BorderThickness="1.5"/>
@@ -30,7 +45,10 @@
                         Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ExitCommand}"
                         control:ButtonHelper.CornerRadius="10" Margin="2,2,2,0" BorderBrush="Red" BorderThickness="1.5"/>
             </StackPanel>
-            <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Margin="20,20,5,5">
+            <control:MetroProgressBar IsIndeterminate="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.IsLoading}" 
+                                      Grid.Row="3" Grid.ColumnSpan="2" Background="Transparent"
+                                      HorizontalContentAlignment="Center" Margin="10"/>
+            <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Margin="20,0,5,5">
                 Don't have any account yet? <Hyperlink Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.GoToRegisterCommand}">Register!</Hyperlink>
             </TextBlock>
         </Grid>

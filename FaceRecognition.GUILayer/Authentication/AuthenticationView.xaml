@@ -18,7 +18,9 @@
         </DataTemplate>
     </controls:MetroWindow.Resources>
     <controls:MetroWindow.DataContext>
-        <local:AuthenticationViewModel ExitAppRequested="ExitAppHandler" AuthenticationFailed="AuthenticationFailedHandler"/>
+        <local:AuthenticationViewModel ExitAppRequested="ExitAppHandler"
+                                       AuthenticationFailed="AuthenticationFailedHandler"
+                                       ErrorOccured="ErrorHandler"/>
     </controls:MetroWindow.DataContext>
     <Grid>
         <ContentControl Content="{Binding CurrentView}"/>

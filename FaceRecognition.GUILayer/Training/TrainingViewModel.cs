@@ -21,8 +21,11 @@ namespace FaceRecognition.GUILayer.Training
     public class TrainingViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<RepositoryModel> _repositories;
+        private bool _isLoading, _isEnabled, _isCaptured;
         private RepositoryModel _repository = null;
         public event EventHandler BackToMainRequested;
+        public event Action<string> ErrorOccured;
+        public event EventHandler<BitmapSource> PreviewImageRequested;
         public ObservableCollection<RepositoryModel> Repositories
         {
             get { return _repositories; }
@@ -32,6 +35,42 @@ namespace FaceRecognition.GUILayer.Training
                 {
                     _repositories = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Repositories)));
+                }
+            }
+        }
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set
+            {
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+                }
+            }
+        }
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsEnabled)));
+                }
+            }
+        }
+        public bool IsCaptured
+        {
+            get { return _isCaptured; }
+            set
+            {
+                if (_isCaptured != value)
+                {
+                    _isCaptured = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCaptured)));
                 }
             }
         }
@@ -49,54 +88,121 @@ namespace FaceRecognition.GUILayer.Training
         }
         public RelayCommand SaveCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
+        public RelayCommand DeleteCommand { get; set; }
+        public RelayCommand PreviewImageCommand { get; set; }
         public RelayCommand BackToMainCommand { get; set; }
-        public async void LoadSamples()
+        public void LoadSamples()
         {
+
+            IsEnabled = false;
+            IsLoading = true;
             try
             {
                 var id = Global.LoggedUser.ID;
                 List<RepositoryModel> list = new List<RepositoryModel>();
-                await Task.Run(() =>
+                using (CoreContext context = new CoreContext())
                 {
-                    using (CoreContext context = new CoreContext())
+                    var result = context.Repositories.Where(x => x.UserID == id).ToList();
+                    if (result != null && result.Count > 0)
                     {
-                        var result = context.Repositories.Where(x => x.UserID == id).ToList();
-                        if (result != null && result.Count > 0)
+                        foreach (var item in result)
                         {
-                            foreach (var item in result)
+
+                            RepositoryModel model = new RepositoryModel
                             {
+                                ID = item.ID,
+                                UserID = item.UserID,
+                                SampleImage = item.SampleImage
+                            };
 
-                                RepositoryModel model = new RepositoryModel
-                                {
-                                    ID = item.ID,
-                                    UserID = item.UserID,
-                                    SampleImage = item.SampleImage
-                                };
+                            BitmapImage image = BitmapReader.Read(item.SampleImage);
+                            Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
+                            model.Image = BitmapConversion.BitmapToBitmapSource(bitmap);
 
-                                BitmapImage image = BitmapReader.Read(item.SampleImage);
-                                Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
-                                model.Image = BitmapConversion.BitmapToBitmapSource(bitmap);
-
-                                list.Add(model);
-                            }
-                            Repositories = new ObservableCollection<RepositoryModel>(list);
-
+                            list.Add(model);
                         }
+                        Repositories = new ObservableCollection<RepositoryModel>(list);
+
                     }
-                });
+                }
             }
             catch(Exception ex)
             {
+                ErrorOccured?.Invoke(ex.Message);
                 LogHelper.LogException(new string[] { ex.ToString() });
+            }
+            finally
+            {
+                IsEnabled = true;
+                IsLoading = false;
             }
         }
         
         public TrainingViewModel()
         {
+            IsEnabled = true;
+            IsLoading = false;
             Repositories = new ObservableCollection<RepositoryModel>();
             SaveCommand = new RelayCommand(SaveHandler, CanSaveHandler);
             CancelCommand = new RelayCommand(CancelHandler, CanCancelHandler);
+            DeleteCommand = new RelayCommand(DeleteHandler, CanDeleteHandler);
+            PreviewImageCommand = new RelayCommand(PreviewImageHandler, CanPreviewImageHandler);
             BackToMainCommand = new RelayCommand(BackToMainHandler);
+        }
+
+        private bool CanPreviewImageHandler()
+        {
+            return Repository != null && !IsCaptured;
+
+        }
+
+        private void PreviewImageHandler()
+        {
+            PreviewImageRequested?.Invoke(this, Repository.Image);
+        }
+
+        private bool CanDeleteHandler()
+        {
+            return Repository != null && !IsCaptured;
+        }
+
+        private async void DeleteHandler()
+        {
+            IsEnabled = false;
+            IsLoading = true;
+            try
+            {
+                using(CoreContext context = new CoreContext())
+                {
+                    var image = context.Repositories.FirstOrDefault(x => x.ID == Repository.ID);
+                    if (image != null)
+                    {
+                        context.Repositories.Remove(image);
+                        await context.SaveChangesAsync();
+                        var data = Repositories.FirstOrDefault(x => x.ID == Repository.ID);
+                        if (data != null)
+                        {
+                            Repositories.Remove(data);
+                        }
+                        Repository = null;
+                    }
+                    else
+                    {
+                        ErrorOccured?.Invoke("Selected image is not found in db");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorOccured?.Invoke(ex.Message);
+                LogHelper.LogException(new string[] { ex.ToString() });
+            }
+            finally
+            {
+
+                IsEnabled = true;
+                IsLoading = false;
+            }
         }
 
         private void BackToMainHandler()
@@ -104,48 +210,55 @@ namespace FaceRecognition.GUILayer.Training
             BackToMainRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        private async void SaveHandler()
+        private void SaveHandler()
         {
+            IsEnabled = false;
+            IsLoading = true;
             try
             {
                 var id = Global.LoggedUser.ID;
                 RepositoryModel item = null;
-                await Task.Run(() =>
+                using (CoreContext context = new CoreContext())
                 {
-                    using(CoreContext context = new CoreContext())
+                    Repository repo = new DataLayer.Models.Repository()
                     {
-                        Repository repo = new DataLayer.Models.Repository()
+                        SampleImage = Repository.SampleImage,
+                        UserID = Repository.UserID
+                    };
+                    var user = context.Users.FirstOrDefault(x => x.ID == id);
+                    if (user != null)
+                    {
+                        user.Repositories.Add(repo);
+                        context.SaveChanges();
+                        BitmapImage image = BitmapReader.Read(Repository.SampleImage);
+                        Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
+                        item = new RepositoryModel
                         {
-                            SampleImage = Repository.SampleImage,
-                            UserID = Repository.UserID
+                            ID = repo.ID,
+                            UserID = repo.UserID,
+                            SampleImage = repo.SampleImage,
+                            Image = BitmapConversion.BitmapToBitmapSource(bitmap),
                         };
-                        var user = context.Users.FirstOrDefault(x => x.ID == id);
-                        if (user != null)
-                        {
-                            user.Repositories.Add(repo);
-                            context.SaveChanges();
-                            BitmapImage image = BitmapReader.Read(Repository.SampleImage);
-                            Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
-                            item = new RepositoryModel
-                            {
-                                ID = repo.ID,
-                                UserID = repo.UserID,
-                                SampleImage = repo.SampleImage,
-                                Image = BitmapConversion.BitmapToBitmapSource(bitmap),
-                            };
-                        }
                     }
-                });
+                }
                 if (item != null)
                 {
 
                     Repositories.Add(item);
-                    Repository = null;
                 }
             }
             catch(Exception ex)
             {
+                ErrorOccured?.Invoke(ex.Message);
                 LogHelper.LogException(new string[] { ex.ToString() });
+            }
+            finally
+            {
+                Repository = null;
+                IsCaptured = false;
+                IsEnabled = true;
+                IsLoading = false;
+
             }
         }
 

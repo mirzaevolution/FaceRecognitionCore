@@ -41,5 +41,14 @@ namespace FaceRecognition.GUILayer.Authentication
                 this.Close();
             }
         }
+
+        private async void ErrorHandler(string error)
+        {
+            if (!string.IsNullOrEmpty(error))
+            {
+                await this.ShowMessageAsync("Error", error);
+
+            }
+        }
     }
 }
