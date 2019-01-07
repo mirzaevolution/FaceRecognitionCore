@@ -1,0 +1,26 @@
+﻿<controls:MetroWindow x:Class="FaceRecognition.GUILayer.Authentication.AuthenticationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FaceRecognition.GUILayer.Authentication"
+        xmlns:login="clr-namespace:FaceRecognition.GUILayer.Authentication.Login"
+        xmlns:register="clr-namespace:FaceRecognition.GUILayer.Authentication.Register"
+        mc:Ignorable="d"
+        Title="Authentication" Height="300" Width="300">
+    <controls:MetroWindow.Resources>
+        <DataTemplate DataType="{x:Type login:LoginViewModel}">
+            <login:LoginView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type register:RegisterViewModel}">
+            <register:RegisterView/>
+        </DataTemplate>
+    </controls:MetroWindow.Resources>
+    <controls:MetroWindow.DataContext>
+        <local:AuthenticationViewModel/>
+    </controls:MetroWindow.DataContext>
+    <Grid>
+        <ContentControl Content="{Binding CurrentView}"/>
+    </Grid>
+</controls:MetroWindow>

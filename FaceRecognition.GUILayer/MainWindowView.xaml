@@ -1,0 +1,50 @@
+﻿<control:MetroWindow x:Class="FaceRecognition.GUILayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:control="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:local="clr-namespace:FaceRecognition.GUILayer" mc:Ignorable="d" 
+        GlowBrush="Red" Icon="/Resources/Icons/main.ico"
+        MinWidth="484" MinHeight="359" ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"             
+        Title="Face Recognition" Height="359" Width="484.5">
+    <Border BorderThickness="10" Background="#272727">
+        <Border.BorderBrush>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF4D0000" Offset="0.184"/>
+                <GradientStop Color="#FF4D0000" Offset="0.777"/>
+                <GradientStop Color="#FFDAD6D6" Offset="0.466"/>
+                <GradientStop Color="#FFDAD6D6" Offset="0.521"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Image Source="/Resources/Icons/main.ico" Height="30" Width="30" HorizontalAlignment="Center" Margin="5"/>
+                <TextBlock Text="Face Recognition" FontSize="38" Style="{StaticResource FearFactorFont}"
+                       Margin="5,20,5,20" HorizontalAlignment="Center">
+                    <TextBlock.Foreground>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFEC160D" Offset="0"/>
+                            <GradientStop Color="#FFEC160D" Offset="1"/>
+                            <GradientStop Color="#FFECE2E2" Offset="0.519"/>
+                        </LinearGradientBrush>
+                    </TextBlock.Foreground>
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10" HorizontalAlignment="Center">
+                <Button Content="Visual Training" control:ButtonHelper.CornerRadius="100" Width="130" Height="130"
+                        BorderBrush="Red" BorderThickness="2" Cursor="Hand" Margin="0,0,30,0"/>
+                <Button Content="Identification" control:ButtonHelper.CornerRadius="100" Width="130" Height="130"
+                        BorderBrush="Red" BorderThickness="2" Cursor="Hand" Margin="30,0,0,0"/>
+            </StackPanel>
+
+        </Grid>
+
+    </Border>
+</control:MetroWindow>
