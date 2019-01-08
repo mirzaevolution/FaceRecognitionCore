@@ -237,3 +237,111 @@ System.InvalidOperationException: Operation is not valid due to the current stat
 
 
 
+********** (Error Log: 08 Jan 2019 9:00:22 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 137
+********************************************************
+
+
+
+
+********** (Error Log: 08 Jan 2019 9:01:03 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 137
+********************************************************
+
+
+
+
+********** (Error Log: 08 Jan 2019 9:43:16 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 152
+********************************************************
+
+
+
+
+********** (Error Log: 08 Jan 2019 9:45:24 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 152
+********************************************************
+
+
+
+
+********** (Error Log: 08 Jan 2019 9:49:28 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 152
+********************************************************
+
+
+
+
+********** (Error Log: 08 Jan 2019 9:55:44 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 149
+********************************************************
+
+
+
+
+********** (Error Log: 08 Jan 2019 9:59:02 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 148
+********************************************************
+
+
+
+
+********** (Error Log: 08 Jan 2019 9:59:23 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 148
+********************************************************
+
+
+
+
+********** (Error Log: 08 Jan 2019 10:00:07 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 148
+********************************************************
+
+
+
+
+********** (Error Log: 08 Jan 2019 10:00:36 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 148
+********************************************************
+
+
+
+
+********** (Error Log: 08 Jan 2019 10:02:21 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 147
+********************************************************
+
+
+
+
+********** (Error Log: 08 Jan 2019 10:04:54 AM) **********
+System.InvalidOperationException: Operation is not valid due to the current state of the object.
+   at WebEye.Controls.Wpf.WebCameraControl.StopCapture() in D:\dev\GitHub\WebEye\WebCameraControl\WPF\WebCameraControl\WebCameraControl.xaml.cs:line 188
+   at FaceRecognition.GUILayer.Training.TrainingView.ComboBoxDevicesSelectionChangedHandler(Object sender, SelectionChangedEventArgs e) in D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml.cs:line 153
+********************************************************
+
+
+
+

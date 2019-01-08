@@ -41,3 +41,5 @@ D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.Da
 D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\obj\Debug\FaceRecognition.DataLayer.dll
 D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\obj\Debug\FaceRecognition.DataLayer.pdb
 D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.DataLayer\obj\Debug\FaceRecognition.DataLayer.csprojResolveAssemblyReference.cache
+D:\Projects\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\PropertyChanged.dll
+D:\Projects\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\PropertyChanged.xml

@@ -43,18 +43,23 @@ namespace FaceRecognition.GUILayer.Training
             
         }
 
-        private void InitializeComboBox()
+        private async void InitializeComboBox()
         {
            
             try
             {
-                ComboBoxDevices.ItemsSource = WebCamCoreControl.GetVideoCaptureDevices();
-
-                if (ComboBoxDevices.Items.Count > 0)
+                await Task.Run(() =>
                 {
-                    ComboBoxDevices.SelectedItem = ComboBoxDevices.Items[0];
-                    
-                }
+                    Dispatcher.Invoke(() =>
+                    {
+                        ComboBoxDevices.ItemsSource = WebCamCoreControl.GetVideoCaptureDevices();
+
+                        if (ComboBoxDevices.Items.Count > 0)
+                        {
+                            ComboBoxDevices.SelectedItem = ComboBoxDevices.Items[0];
+                        }
+                    }, System.Windows.Threading.DispatcherPriority.Background);
+                });
             }
             catch(Exception ex)
             {
@@ -62,55 +67,67 @@ namespace FaceRecognition.GUILayer.Training
             }
         }
 
-        private void ButtonCaptureHandler(object sender, RoutedEventArgs e)
+        private async void ButtonCaptureHandler(object sender, RoutedEventArgs e)
         {
             try
             {
-                ListBoxImages.SelectedItem = null;
-                var bitmap = WebCamCoreControl.GetCurrentImage();
-                var repo = DataContext as TrainingViewModel;
-                
-                if (repo != null)
+                await Task.Run(() =>
                 {
-                    repo.IsCaptured = true;
-                    repo.Repository = null;
-                    repo.Repository = new Models.RepositoryModel
+                    Dispatcher.Invoke(() =>
                     {
-                        UserID = Global.LoggedUser.ID,
-                        Image = BitmapConversion.BitmapToBitmapSource(bitmap)
-                    };
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        ms.Position = 0;
-                        bitmap.Save(ms, ImageFormat.Png);
-                        ms.Position = 0;
-                        repo.Repository.SampleImage = ms.ToArray();
-                    }
-                }
+                        ListBoxImages.SelectedItem = null;
+                        var bitmap = WebCamCoreControl.GetCurrentImage();
+                        var repo = DataContext as TrainingViewModel;
+
+                        if (repo != null)
+                        {
+                            repo.IsCaptured = true;
+                            repo.Repository = null;
+                            repo.Repository = new Models.RepositoryModel
+                            {
+                                UserID = Global.LoggedUser.ID,
+                                Image = BitmapConversion.BitmapToBitmapSource(bitmap)
+                            };
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                ms.Position = 0;
+                                bitmap.Save(ms, ImageFormat.Png);
+                                ms.Position = 0;
+                                repo.Repository.SampleImage = ms.ToArray();
+                            }
+
+                        }
+                    });
+                });
             }
             catch(Exception ex)
             {
                 LogHelper.LogException(new string[] { ex.Message });
             }
-            
         }
 
   
 
-        private void ButtonInitializeHandler(object sender, RoutedEventArgs e)
+        private async void ButtonInitializeHandler(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (ComboBoxDevices.Items.Count > 0)
                 {
-                    if (WebCamCoreControl.IsCapturing)
+                    await Task.Run(() =>
                     {
-                        WebCamCoreControl.StopCapture();
-                    }
-                    var cameraId = (WebCameraId)ComboBoxDevices.SelectedItem;
-                    WebCamCoreControl.StartCapture(cameraId);
-                    ButtonCapture.IsEnabled = true;
-                    ButtonInitialize.IsEnabled = false;
+                        Dispatcher.Invoke(() =>
+                        {
+                            if (WebCamCoreControl.IsCapturing)
+                            {
+                                WebCamCoreControl.StopCapture();
+                            }
+                            var cameraId = (WebCameraId)ComboBoxDevices.SelectedItem;
+                            WebCamCoreControl.StartCapture(cameraId);
+                            ButtonCapture.IsEnabled = true;
+                            ButtonInitialize.IsEnabled = false;
+                        }, System.Windows.Threading.DispatcherPriority.Background);
+                    });
                 }
             }
             catch (Exception ex)
@@ -131,7 +148,6 @@ namespace FaceRecognition.GUILayer.Training
         {
             try
             {
-
                 ButtonInitialize.IsEnabled = true;
                 ButtonCapture.IsEnabled = false;
                 WebCamCoreControl.StopCapture();

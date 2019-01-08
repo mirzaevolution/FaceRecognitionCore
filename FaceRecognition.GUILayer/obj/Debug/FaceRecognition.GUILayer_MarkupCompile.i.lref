@@ -1,4 +1,11 @@
-﻿
-
-FD:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.GUILayer\PreviewFull\PreviewView.xaml;;
+﻿D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\obj\Debug\GeneratedInternalTypeHelper.g.i.cs
+FD:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\App.xaml;;
+FD:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Authentication\AuthenticationView.xaml;;
+FD:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Authentication\Login\LoginView.xaml;;
+FD:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Authentication\Register\RegisterView.xaml;;
+FD:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Home\HomeView.xaml;;
+FD:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Identification\IdentificationView.xaml;;
+FD:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\MainWindowView.xaml;;
+FD:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\PreviewFull\PreviewView.xaml;;
+FD:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\Training\TrainingView.xaml;;
 

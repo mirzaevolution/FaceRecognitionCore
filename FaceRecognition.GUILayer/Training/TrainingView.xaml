@@ -19,12 +19,11 @@
             <RowDefinition Height="auto"/>
 
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <DockPanel Background="RoyalBlue" LastChildFill="False">
+        <DockPanel Background="#123" LastChildFill="False">
             <Button Height="35" Width="35" DockPanel.Dock="Right" Command="{Binding BackToMainCommand}"
-                    Background="Red" control:ButtonHelper.CornerRadius="35" Margin="2">
+                    Background="Red" control:ButtonHelper.CornerRadius="35" Margin="2" Cursor="Hand">
                 <iconPacks:MaterialLight Kind="ArrowLeft"/>
             </Button>
         </DockPanel>
@@ -38,7 +37,6 @@
                     <RowDefinition/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-
                 <wpf:WebCameraControl x:Name="WebCamCoreControl" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <StackPanel Grid.Row="1">
                     <ComboBox x:Name="ComboBoxDevices" DisplayMemberPath="Name" Margin="10" SelectionChanged="ComboBoxDevicesSelectionChangedHandler"/>
@@ -68,10 +66,7 @@
                 <Image Source="{Binding Image}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,32.6"/>
             </DockPanel>
         </Grid>
-        <control:MetroProgressBar IsIndeterminate="{Binding DataContext.IsLoading, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                  Grid.Row="2" Grid.ColumnSpan="2" Background="Transparent"
-                                  HorizontalContentAlignment="Center" Margin="10,20,10,10"/>
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="2">
             <ListBox Name="ListBoxImages" ItemsSource="{Binding Repositories,IsAsync=True}" 
                      Margin="10" SelectedItem="{Binding Repository, Mode=TwoWay}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="ListBoxSelectionChangedHandler">
