@@ -82,6 +82,7 @@ namespace FaceRecognition.GUILayer.Training
                         if (repo != null)
                         {
                             repo.IsCaptured = true;
+                            repo.IsSaved = false;
                             repo.Repository = null;
                             repo.Repository = new Models.RepositoryModel
                             {
@@ -140,17 +141,34 @@ namespace FaceRecognition.GUILayer.Training
         {
             if (DataContext is TrainingViewModel repo)
             {
+                repo.IsSaved = true;
                 repo.IsCaptured = false;
             }
         }
 
-        private void ComboBoxDevicesSelectionChangedHandler(object sender, SelectionChangedEventArgs e)
+        private async void ComboBoxDevicesSelectionChangedHandler(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                ButtonInitialize.IsEnabled = true;
-                ButtonCapture.IsEnabled = false;
-                WebCamCoreControl.StopCapture();
+                Cursor = Cursors.Wait;
+                await Task.Run(() =>
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        if (WebCamCoreControl.IsCapturing)
+                        {
+                            WebCamCoreControl.StopCapture();
+                        }
+                        var cameraId = (WebCameraId)ComboBoxDevices.SelectedItem;
+                        WebCamCoreControl.StartCapture(cameraId);
+                        ButtonCapture.IsEnabled = true;
+                        ButtonInitialize.IsEnabled = false;
+                    }, System.Windows.Threading.DispatcherPriority.Background);
+                });
+                Cursor = null;
+                //ButtonInitialize.IsEnabled = true;
+                //ButtonCapture.IsEnabled = false;
+                //WebCamCoreControl.StopCapture();
             }
             catch(Exception ex)
             {

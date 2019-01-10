@@ -194,3 +194,4 @@ D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.GU
 D:\programming\MyProjects\FaceRecognition\FaceRecognitionCore\FaceRecognition.GUILayer\obj\Debug\FaceRecognition.GUILayer.Migrations.InitDB.resources
 D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\obj\Debug\PreviewFull\PreviewView.g.cs
 D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\obj\Debug\PreviewFull\PreviewView.baml
+D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\obj\Debug\FaceRecognition.GUILayer.Migrations.AddDescriptionColumn.resources

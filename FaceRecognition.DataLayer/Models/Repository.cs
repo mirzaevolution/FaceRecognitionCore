@@ -5,6 +5,7 @@ namespace FaceRecognition.DataLayer.Models
     {
         private int _id;
         private byte[] _sampleImage;
+        private string _description;
         private int _userId;
         private User _user;
 
@@ -47,6 +48,21 @@ namespace FaceRecognition.DataLayer.Models
                 {
                     _userId = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UserID)));
+                }
+            }
+        }
+        public string Description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                if(_description!=value)
+                {
+                    _description = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Description)));
                 }
             }
         }

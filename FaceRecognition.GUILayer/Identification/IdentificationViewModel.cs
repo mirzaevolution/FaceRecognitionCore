@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FaceRecognition.GUILayer.Identification
 {
-    class IdentificationViewModel
+    public class IdentificationViewModel
     {
     }
 }

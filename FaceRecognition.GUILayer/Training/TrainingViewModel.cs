@@ -21,7 +21,7 @@ namespace FaceRecognition.GUILayer.Training
     public class TrainingViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<RepositoryModel> _repositories;
-        private bool _isLoading, _isEnabled, _isCaptured;
+        private bool _isLoading, _isEnabled, _isCaptured, _isSaved;
         private RepositoryModel _repository = null;
         public event EventHandler BackToMainRequested;
         public event Action<string> ErrorOccured;
@@ -74,6 +74,18 @@ namespace FaceRecognition.GUILayer.Training
                 }
             }
         }
+        public bool IsSaved
+        {
+            get { return _isSaved; }
+            set
+            {
+                if (_isSaved != value)
+                {
+                    _isSaved = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSaved)));
+                }
+            }
+        }
         public RepositoryModel Repository
         {
             get { return _repository; }
@@ -112,6 +124,7 @@ namespace FaceRecognition.GUILayer.Training
                             {
                                 ID = item.ID,
                                 UserID = item.UserID,
+                                Description = item.Description,
                                 SampleImage = item.SampleImage
                             };
 
@@ -200,6 +213,7 @@ namespace FaceRecognition.GUILayer.Training
             finally
             {
 
+                IsSaved = false;
                 IsEnabled = true;
                 IsLoading = false;
             }
@@ -207,6 +221,7 @@ namespace FaceRecognition.GUILayer.Training
 
         private void BackToMainHandler()
         {
+            Repository = null; 
             BackToMainRequested?.Invoke(this, EventArgs.Empty);
         }
 
@@ -216,35 +231,13 @@ namespace FaceRecognition.GUILayer.Training
             IsLoading = true;
             try
             {
-                var id = Global.LoggedUser.ID;
-                RepositoryModel item = null;
-                using (CoreContext context = new CoreContext())
+                if(!IsSaved && IsCaptured)
                 {
-                    Repository repo = new DataLayer.Models.Repository()
-                    {
-                        SampleImage = Repository.SampleImage,
-                        UserID = Repository.UserID
-                    };
-                    var user = context.Users.FirstOrDefault(x => x.ID == id);
-                    if (user != null)
-                    {
-                        user.Repositories.Add(repo);
-                        context.SaveChanges();
-                        BitmapImage image = BitmapReader.Read(Repository.SampleImage);
-                        Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
-                        item = new RepositoryModel
-                        {
-                            ID = repo.ID,
-                            UserID = repo.UserID,
-                            SampleImage = repo.SampleImage,
-                            Image = BitmapConversion.BitmapToBitmapSource(bitmap),
-                        };
-                    }
+                    Add();
                 }
-                if (item != null)
+                else
                 {
-
-                    Repositories.Add(item);
+                    Update();
                 }
             }
             catch(Exception ex)
@@ -258,7 +251,7 @@ namespace FaceRecognition.GUILayer.Training
                 IsCaptured = false;
                 IsEnabled = true;
                 IsLoading = false;
-
+                IsSaved = false;
             }
         }
 
@@ -270,12 +263,66 @@ namespace FaceRecognition.GUILayer.Training
         private void CancelHandler()
         {
             Repository = null;
+
+            IsSaved = false;
         }
 
         private bool CanCancelHandler()
         {
             return Repository != null;
         }
+
+
+        private void Add()
+        {
+            var id = Global.LoggedUser.ID;
+            RepositoryModel item = null;
+            using (CoreContext context = new CoreContext())
+            {
+                Repository repo = new DataLayer.Models.Repository()
+                {
+                    SampleImage = Repository.SampleImage,
+                    UserID = Repository.UserID,
+                    Description = Repository.Description
+                };
+                var user = context.Users.FirstOrDefault(x => x.ID == id);
+                if (user != null)
+                {
+                    user.Repositories.Add(repo);
+                    context.SaveChanges();
+                    BitmapImage image = BitmapReader.Read(Repository.SampleImage);
+                    Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
+                    item = new RepositoryModel
+                    {
+                        ID = repo.ID,
+                        UserID = repo.UserID,
+                        SampleImage = repo.SampleImage,
+                        Description = repo.Description,
+                        Image = BitmapConversion.BitmapToBitmapSource(bitmap),
+                    };
+                }
+            }
+            if (item != null)
+            {
+
+                Repositories.Add(item);
+            }
+        }
+        private void Update()
+        {
+            var id = Global.LoggedUser.ID;
+            using (CoreContext context = new CoreContext())
+            {
+                var repo = context.Repositories.FirstOrDefault(x => x.ID == Repository.ID);
+                if (repo != null)
+                {
+                    repo.Description = Repository.Description;
+                    context.SaveChanges();
+                }
+                
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

@@ -10,6 +10,7 @@ namespace FaceRecognition.GUILayer.Models
         private int _id;
         private byte[] _sampleImage;
         private int _userId;
+        private string _description;
         private BitmapSource _image;
         public int ID
         {
@@ -50,6 +51,21 @@ namespace FaceRecognition.GUILayer.Models
                 {
                     _userId = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UserID)));
+                }
+            }
+        }
+        public string Description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                if (_description != value)
+                {
+                    _description = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Description)));
                 }
             }
         }

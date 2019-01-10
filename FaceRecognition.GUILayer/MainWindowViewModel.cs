@@ -73,6 +73,7 @@ namespace FaceRecognition.GUILayer
 
         private void GoToIdentificationHandler(object sender, EventArgs e)
         {
+            ResizeScreenRequested?.Invoke(this, new Tuple<double, double>(811.2, 660.275));
             CurrentView = _identificationViewModel;
         }
 

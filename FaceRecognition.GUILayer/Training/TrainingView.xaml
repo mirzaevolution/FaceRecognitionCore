@@ -7,7 +7,9 @@
              xmlns:control="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:FaceRecognition.GUILayer.Training"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" x:Class="FaceRecognition.GUILayer.Training.TrainingView"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+            x:Class="FaceRecognition.GUILayer.Training.TrainingView"
              mc:Ignorable="d" d:DesignWidth="694.487" d:DesignHeight="566.88">
     <i:Interaction.Triggers>
         <i:EventTrigger>
@@ -37,21 +39,28 @@
                     <RowDefinition/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <wpf:WebCameraControl x:Name="WebCamCoreControl" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <wpf:WebCameraControl x:Name="WebCamCoreControl" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10"/>
                 <StackPanel Grid.Row="1">
-                    <ComboBox x:Name="ComboBoxDevices" DisplayMemberPath="Name" Margin="10" SelectionChanged="ComboBoxDevicesSelectionChangedHandler"/>
+                    <ComboBox x:Name="ComboBoxDevices" DisplayMemberPath="Name" Width="300" Margin="10" SelectionChanged="ComboBoxDevicesSelectionChangedHandler"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button x:Name="ButtonInitialize" Margin="3" Width="80" Click="ButtonInitializeHandler"
                             Content="Initialize" control:ButtonHelper.CornerRadius="10"
-                            HorizontalAlignment="Center" BorderBrush="Red"/>
+                            HorizontalAlignment="Center" BorderBrush="Red" Visibility="Collapsed"/>
                         <Button x:Name="ButtonCapture" Margin="3" Width="80" Click="ButtonCaptureHandler"
                             Content="Capture" control:ButtonHelper.CornerRadius="10"
                             HorizontalAlignment="Center" BorderBrush="Red" IsEnabled="False"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
-            <DockPanel  Grid.Column="1" >
-                <WrapPanel Orientation="Horizontal" 
+            <Grid  Grid.Column="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Image Source="{Binding Image}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Grid.Row="0"/>
+                <TextBox Text="{Binding Description,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="20,5" control:TextBoxHelper.Watermark="Enter short description" control:TextBoxHelper.ClearTextButton="True" Grid.Row="1"/>
+                <WrapPanel Orientation="Horizontal" Grid.Row="2"
                             DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="7,10,7.4,0" 
                             IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=IsEnabled}">
                     <Button Content="Save" Command="{Binding DataContext.SaveCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Height="30"
@@ -63,8 +72,7 @@
                     <Button Content="Preview" Command="{Binding DataContext.PreviewImageCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Height="30"
                             Width="66" Margin="4" control:ButtonHelper.CornerRadius="10" BorderBrush="Red"/>
                 </WrapPanel>
-                <Image Source="{Binding Image}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,32.6"/>
-            </DockPanel>
+            </Grid>
         </Grid>
         <Grid Grid.Row="2">
             <ListBox Name="ListBoxImages" ItemsSource="{Binding Repositories,IsAsync=True}" 
@@ -72,7 +80,7 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="ListBoxSelectionChangedHandler">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Image Source="{Binding Image}" Margin="5" Height="50" Width="80"/>
+                        <Image Source="{Binding Image}" Margin="5" Height="50" Width="80" HorizontalAlignment="Center"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>

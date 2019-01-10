@@ -112,6 +112,10 @@
     <Compile Include="Migrations\201901071907166_InitDB.Designer.cs">
       <DependentUpon>201901071907166_InitDB.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901100756346_AddDescriptionColumn.cs" />
+    <Compile Include="Migrations\201901100756346_AddDescriptionColumn.Designer.cs">
+      <DependentUpon>201901100756346_AddDescriptionColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\LoggedUserModel.cs" />
     <Compile Include="Models\LoginUserModel.cs" />
@@ -204,6 +208,9 @@
     <EmbeddedResource Include="Migrations\201901071907166_InitDB.resx">
       <DependentUpon>201901071907166_InitDB.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901100756346_AddDescriptionColumn.resx">
+      <DependentUpon>201901100756346_AddDescriptionColumn.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -241,6 +248,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\user_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\not-found.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.3.3.2\build\Fody.targets" Condition="Exists('..\packages\Fody.3.3.2\build\Fody.targets')" />
