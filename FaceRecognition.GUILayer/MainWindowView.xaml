@@ -7,11 +7,24 @@
         xmlns:local="clr-namespace:FaceRecognition.GUILayer" mc:Ignorable="d" 
         xmlns:home="clr-namespace:FaceRecognition.GUILayer.Home"
         xmlns:training="clr-namespace:FaceRecognition.GUILayer.Training"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:identification="clr-namespace:FaceRecognition.GUILayer.Identification"
         GlowBrush="Red" Icon="/Resources/Icons/main.ico"
         MinWidth="484" MinHeight="359" 
         WindowStartupLocation="CenterScreen"             
         Title="Face Recognition" Height="400.807" Width="390.387">
+    <control:MetroWindow.RightWindowCommands>
+        <control:WindowCommands>
+            <Button Name="ButtonSignout" Click="SignOutHandler" Cursor="Hand" ToolTip="Sign Out">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <iconPacks:MaterialLight Kind="Logout"/>
+                </Grid>
+            </Button>
+        </control:WindowCommands>
+    </control:MetroWindow.RightWindowCommands>
     <control:MetroWindow.Resources>
         <DataTemplate DataType="{x:Type home:HomeViewModel}">
             <home:HomeView/>
@@ -24,9 +37,20 @@
         </DataTemplate>
     </control:MetroWindow.Resources>
     <control:MetroWindow.DataContext>
-        <local:MainWindowViewModel ResizeScreenRequested="ResizeScreenHandler" ErrorOccured="ErrorHandler"/>
+        <local:MainWindowViewModel ResizeScreenRequested="ResizeScreenHandler" 
+                                   ErrorOccured="ErrorHandler"
+                                   Information="InformationHandler"/>
     </control:MetroWindow.DataContext>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
         <ContentControl Content="{Binding CurrentView}"/>
+        <StatusBar Visibility="{Binding IsVisible,Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Row="3" Background="#FF235AFF" Foreground="White" Height="33">
+            <TextBlock x:Name="TextStatus" FontSize="12" Height="19" Margin="3,0,0,0"
+                       TextWrapping="Wrap" TextTrimming="CharacterEllipsis">
+            </TextBlock>
+        </StatusBar>
     </Grid>
 </control:MetroWindow>

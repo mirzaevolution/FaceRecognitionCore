@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.Controls;
+﻿using FaceRecognition.GUILayer.Models;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,19 @@ namespace FaceRecognition.GUILayer
             {
                 MessageBox.Show(error, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void InformationHandler(string message)
+        {
+            TextStatus.Text = message;
+        }
+
+        private void SignOutHandler(object sender, RoutedEventArgs e)
+        {
+
+            Global.LoggedUser = null;
+            new Authentication.AuthenticationView().Show();
+            this.Close();
         }
     }
 }

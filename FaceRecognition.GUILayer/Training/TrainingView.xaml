@@ -85,7 +85,7 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" IsItemsHost="True">
+                        <WrapPanel Orientation="Horizontal" IsItemsHost="True" HorizontalAlignment="Center">
                         </WrapPanel>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>

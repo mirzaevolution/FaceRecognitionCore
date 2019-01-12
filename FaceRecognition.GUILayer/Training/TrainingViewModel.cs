@@ -24,6 +24,7 @@ namespace FaceRecognition.GUILayer.Training
         private bool _isLoading, _isEnabled, _isCaptured, _isSaved;
         private RepositoryModel _repository = null;
         public event EventHandler BackToMainRequested;
+        public event Action<string> Information;
         public event Action<string> ErrorOccured;
         public event EventHandler<BitmapSource> PreviewImageRequested;
         public ObservableCollection<RepositoryModel> Repositories
@@ -103,44 +104,51 @@ namespace FaceRecognition.GUILayer.Training
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand PreviewImageCommand { get; set; }
         public RelayCommand BackToMainCommand { get; set; }
-        public void LoadSamples()
+        public async void LoadSamples()
         {
 
             IsEnabled = false;
             IsLoading = true;
             try
             {
+                Information?.Invoke("Loading samples from database....");
                 var id = Global.LoggedUser.ID;
-                List<RepositoryModel> list = new List<RepositoryModel>();
-                using (CoreContext context = new CoreContext())
+                List<Repository> listFromDb = new List<DataLayer.Models.Repository>();
+                
+                await Task.Run(() =>
                 {
-                    var result = context.Repositories.Where(x => x.UserID == id).ToList();
-                    if (result != null && result.Count > 0)
+
+                    using (CoreContext context = new CoreContext())
                     {
-                        foreach (var item in result)
-                        {
-
-                            RepositoryModel model = new RepositoryModel
-                            {
-                                ID = item.ID,
-                                UserID = item.UserID,
-                                Description = item.Description,
-                                SampleImage = item.SampleImage
-                            };
-
-                            BitmapImage image = BitmapReader.Read(item.SampleImage);
-                            Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
-                            model.Image = BitmapConversion.BitmapToBitmapSource(bitmap);
-
-                            list.Add(model);
-                        }
-                        Repositories = new ObservableCollection<RepositoryModel>(list);
-
+                        listFromDb = context.Repositories.Where(x => x.UserID == id).ToList();
                     }
+                });
+                if (listFromDb != null && listFromDb.Count > 0)
+                {
+                    foreach (var item in listFromDb)
+                    {
+
+                        RepositoryModel model = new RepositoryModel
+                        {
+                            ID = item.ID,
+                            UserID = item.UserID,
+                            Description = item.Description,
+                            SampleImage = item.SampleImage
+                        };
+
+                        BitmapImage image = BitmapReader.Read(item.SampleImage);
+                        Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
+                        model.Image = BitmapConversion.BitmapToBitmapSource(bitmap);
+
+                        Repositories.Add(model);
+                    }
+
                 }
+                Information?.Invoke("Data loaded successfully.");
             }
             catch(Exception ex)
             {
+                Information?.Invoke("An error occured.");
                 ErrorOccured?.Invoke(ex.Message);
                 LogHelper.LogException(new string[] { ex.ToString() });
             }
@@ -171,7 +179,10 @@ namespace FaceRecognition.GUILayer.Training
 
         private void PreviewImageHandler()
         {
+            Information?.Invoke("Invoking preview handler...");
             PreviewImageRequested?.Invoke(this, Repository.Image);
+            Information?.Invoke(string.Empty);
+
         }
 
         private bool CanDeleteHandler()
@@ -198,9 +209,13 @@ namespace FaceRecognition.GUILayer.Training
                             Repositories.Remove(data);
                         }
                         Repository = null;
+                        Information?.Invoke("Image removed successfully");
+
                     }
                     else
                     {
+                        Information?.Invoke("Selected image is not found in db");
+
                         ErrorOccured?.Invoke("Selected image is not found in db");
                     }
                 }
@@ -221,6 +236,7 @@ namespace FaceRecognition.GUILayer.Training
 
         private void BackToMainHandler()
         {
+            Information?.Invoke(string.Empty);
             Repository = null; 
             BackToMainRequested?.Invoke(this, EventArgs.Empty);
         }
@@ -229,6 +245,7 @@ namespace FaceRecognition.GUILayer.Training
         {
             IsEnabled = false;
             IsLoading = true;
+
             try
             {
                 if(!IsSaved && IsCaptured)
@@ -263,7 +280,7 @@ namespace FaceRecognition.GUILayer.Training
         private void CancelHandler()
         {
             Repository = null;
-
+            Information?.Invoke(string.Empty);
             IsSaved = false;
         }
 
@@ -273,53 +290,105 @@ namespace FaceRecognition.GUILayer.Training
         }
 
 
-        private void Add()
+        private async void Add()
         {
             var id = Global.LoggedUser.ID;
             RepositoryModel item = null;
-            using (CoreContext context = new CoreContext())
+
+            Repository repo = new DataLayer.Models.Repository()
             {
-                Repository repo = new DataLayer.Models.Repository()
+                SampleImage = Repository.SampleImage,
+                UserID = Repository.UserID,
+                Description = Repository.Description
+            };
+            Information?.Invoke("Adding image to database...");
+            bool success = true;
+            string error = "";
+            BitmapImage image = BitmapReader.Read(Repository.SampleImage);
+            Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
+            BitmapSource bitmapSource = BitmapConversion.BitmapToBitmapSource(bitmap);
+            await Task.Run(() =>
+            {
+                try
                 {
-                    SampleImage = Repository.SampleImage,
-                    UserID = Repository.UserID,
-                    Description = Repository.Description
-                };
-                var user = context.Users.FirstOrDefault(x => x.ID == id);
-                if (user != null)
-                {
-                    user.Repositories.Add(repo);
-                    context.SaveChanges();
-                    BitmapImage image = BitmapReader.Read(Repository.SampleImage);
-                    Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
-                    item = new RepositoryModel
+                    using (CoreContext context = new CoreContext())
                     {
-                        ID = repo.ID,
-                        UserID = repo.UserID,
-                        SampleImage = repo.SampleImage,
-                        Description = repo.Description,
-                        Image = BitmapConversion.BitmapToBitmapSource(bitmap),
-                    };
+                        var user = context.Users.FirstOrDefault(x => x.ID == id);
+                        if (user != null)
+                        {
+                            user.Repositories.Add(repo);
+                            context.SaveChanges();
+
+                            item = new RepositoryModel
+                            {
+                                ID = repo.ID,
+                                UserID = repo.UserID,
+                                SampleImage = repo.SampleImage,
+                                Description = repo.Description,
+                                Image = bitmapSource,
+                            };
+                        }
+                    }
                 }
-            }
+                catch(Exception ex)
+                {
+                    error = ex.Message;
+                    success = false;
+                }
+            });
+           
             if (item != null)
             {
 
                 Repositories.Add(item);
             }
-        }
-        private void Update()
-        {
-            var id = Global.LoggedUser.ID;
-            using (CoreContext context = new CoreContext())
+            if (success)
             {
-                var repo = context.Repositories.FirstOrDefault(x => x.ID == Repository.ID);
-                if (repo != null)
+                Information?.Invoke("New image added successfully.");
+            }
+            else
+            {
+                Information?.Invoke("Failed to add image.");
+                ErrorOccured?.Invoke(error);
+            }
+        }
+        private async void Update()
+        {
+            var id = Repository.ID;
+            string desc = Repository.Description;
+            Information?.Invoke("Adding image to database...");
+            bool success = true;
+            string error = "";
+            await Task.Run(() =>
+            {
+                try
                 {
-                    repo.Description = Repository.Description;
-                    context.SaveChanges();
+                    using (CoreContext context = new CoreContext())
+                    {
+                        var repo = context.Repositories.FirstOrDefault(x => x.ID == id);
+                        if (repo != null)
+                        {
+                            repo.Description = desc;
+                            context.SaveChanges();
+                        }
+
+                    }
+
                 }
-                
+                catch (Exception ex)
+                {
+                    error = ex.Message;
+                    success = false;
+                }
+            });
+            if (success)
+            {
+                Information?.Invoke("Data updated successfully.");
+            }
+            else
+            {
+                Information?.Invoke("");
+                ErrorOccured?.Invoke(error);
             }
         }
 

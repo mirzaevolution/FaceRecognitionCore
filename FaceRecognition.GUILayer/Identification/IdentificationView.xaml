@@ -6,9 +6,16 @@
              xmlns:wpf="clr-namespace:WebEye.Controls.Wpf;assembly=WebEye.Controls.Wpf.WebCameraControl"
              xmlns:control="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              xmlns:local="clr-namespace:FaceRecognition.GUILayer.Identification"
              Unloaded="UnloadedHandler"
              mc:Ignorable="d" d:DesignWidth="811.2" d:DesignHeight="620.275">
+    <i:Interaction.Triggers>
+        <i:EventTrigger>
+            <ei:CallMethodAction TargetObject="{Binding}" MethodName="LoadSamples"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -23,18 +30,19 @@
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <Button Height="35" Width="35" VerticalAlignment="Top" HorizontalAlignment="Left" Command="{Binding BackToMainCommand}"
+            <Button Height="35" Width="35" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                    Command="{Binding BackToMainCommand}"
                     Background="Red" control:ButtonHelper.CornerRadius="35" Margin="10" Cursor="Hand">
                 <iconPacks:MaterialLight Kind="ArrowLeft"/>
             </Button>
             <wpf:WebCameraControl BorderBrush="Red" BorderThickness="2" x:Name="WebCamCoreControl" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="65,10,39.8,9.6" />
             <StackPanel Grid.Row="1">
-                <ComboBox x:Name="ComboBoxDevices" DisplayMemberPath="Name" Margin="112,10,100.8,10" SelectionChanged="ComboBoxDevicesSelectionChangedHandler"/>
+                <ComboBox x:Name="ComboBoxDevices" DisplayMemberPath="Name" Margin="100,10,80,10" SelectionChanged="ComboBoxDevicesSelectionChangedHandler"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button x:Name="ButtonInitialize" Margin="3" Width="80"
                             Content="Initialize" control:ButtonHelper.CornerRadius="10"
                             HorizontalAlignment="Center" BorderBrush="Red" Visibility="Collapsed"/>
-                    <Button x:Name="ButtonCapture" Margin="3" Width="120" Click="ButtonCaptureHandler"
+                    <Button x:Name="ButtonCapture" Margin="20,3,3,3" Width="120" Click="ButtonCaptureHandler"
                             Content="Capture" control:ButtonHelper.CornerRadius="10"
                             HorizontalAlignment="Center" BorderBrush="Red" IsEnabled="False"/>
                 </StackPanel>
@@ -46,10 +54,14 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Image HorizontalAlignment="Center" Source="/Resources/not-found.png" VerticalAlignment="Center" Margin="10" Grid.Row="0"/>
+                <Border BorderBrush="Red" BorderThickness="1.5" DataContext="{Binding PreviewImage}">
+                    <Image HorizontalAlignment="Center" Source="{Binding Image}" VerticalAlignment="Center" Margin="10" Grid.Row="0"/>
+                </Border>
                 <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
-                    <control:NumericUpDown HorizontalAlignment="Center"  Margin="10" control:TextBoxHelper.Watermark="Enter noise" Width="150" Maximum="255" Minimum="0"/>
-                    <Button Content="Set Noise" Command="{Binding DataContext.CancelCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Height="30"
+                    <control:NumericUpDown HorizontalAlignment="Center"  Margin="10" 
+                                           control:TextBoxHelper.Watermark="Enter noise" Width="150" Maximum="255" Minimum="0"
+                                           Value="{Binding NoiseValue,Mode=TwoWay}"/>
+                    <Button Content="Set Noise" Command="{Binding SetNoiseCommand}" Height="30"
                             Width="70" Margin="4" control:ButtonHelper.CornerRadius="10" BorderBrush="Red"/>
                 </WrapPanel>
             </Grid>
@@ -64,21 +76,23 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <GroupBox Header="Eigenface" Margin="5" VerticalAlignment="Top">
+            <GroupBox Header="Eigenface" Margin="5" VerticalAlignment="Top" DataContext="{Binding EigenfaceResult}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1.4*"/>
+                        <ColumnDefinition Width="1.2*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <Image Name="ImageEigenface" Source="/Resources/not-found.png" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" />
+                    <Border BorderBrush="Red" BorderThickness="1" Margin="3">
+                        <Image Name="ImageEigenface" Source="{Binding Image}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" />
+                    </Border>
                     <StackPanel Grid.Column="1" Margin="3" VerticalAlignment="Center">
                         <TextBlock Text="Full Name:" Margin="5,3"/>
-                        <TextBox Name="TextBoxFullNameEigenface" Text="" Margin="5,3" IsReadOnly="True"/>
+                        <TextBox Name="TextBoxFullNameEigenface" Text="{Binding FullName}" Margin="5,3" IsReadOnly="True"/>
 
                         <TextBlock Text="Descripition:" Margin="5,3"/>
-                        <TextBox Name="TextBoxDescEigenface"  Text="" Margin="5,3" IsReadOnly="True"/>
+                        <TextBox Name="TextBoxDescEigenface"  Text="{Binding Description}" Margin="5,3" IsReadOnly="True"/>
 
-                        <TextBlock Name="TextBlockDetectTimeEigenface" Text="Detectime Time: 5 seconds" Margin="5,5" VerticalAlignment="Center"/>
+                        <TextBlock Name="TextBlockDetectTimeEigenface" Text="{Binding DetectionTime}" Margin="5,5" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
             </GroupBox>
@@ -86,27 +100,29 @@
             <StackPanel Grid.Column="1" Grid.RowSpan="2" Margin="1">
                 <Button Content="Identify" control:ButtonHelper.CornerRadius="80" Width="80" Height="80"
                         BorderBrush="Red" BorderThickness="2" Cursor="Hand" Margin="5"
-                        Command="{Binding GoToTrainingCommand}"/>
+                        Command="{Binding IdentifyCommand}"/>
                 <Button Content="Calc Detail" control:ButtonHelper.CornerRadius="80" Width="80" Height="80"
                         BorderBrush="Red" BorderThickness="2" Cursor="Hand" Margin="5"
-                        Command="{Binding GoToTrainingCommand}"/>
+                        Command="{Binding CalculationDetailCommand}"/>
                
             </StackPanel>
-            <GroupBox Header="Fisherface" Margin="5" Grid.Column="2" VerticalAlignment="Top">
+            <GroupBox Header="Fisherface" Margin="5" Grid.Column="2" VerticalAlignment="Top" DataContext="{Binding FisherfaceResult}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1.4*"/>
+                        <ColumnDefinition Width="1.2*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <Image Name="ImageFisherface" Source="/Resources/not-found.png" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" />
+                    <Border BorderBrush="Red" BorderThickness="1" Margin="3">
+                        <Image Name="ImageFisherface" Source="{Binding Image}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" />
+                    </Border>
                     <StackPanel Grid.Column="1" Margin="3" VerticalAlignment="Center">
                         <TextBlock Text="Full Name:" Margin="5,3"/>
-                        <TextBox Name="TextBoxFullNameFisherface" Text="" Margin="5,3" IsReadOnly="True"/>
+                        <TextBox Name="TextBoxFullNameFisherface" Text="{Binding FullName}" Margin="5,3" IsReadOnly="True"/>
 
                         <TextBlock Text="Descripition:" Margin="5,3"/>
-                        <TextBox Name="TextBoxDescFisherface"  Text="" Margin="5,3" IsReadOnly="True"/>
+                        <TextBox Name="TextBoxDescFisherface"  Text="{Binding Description}" Margin="5,3" IsReadOnly="True"/>
 
-                        <TextBlock Name="TextBlockDetectTimeFisherface" Text="Detectime Time: 5 seconds" Margin="5,5" VerticalAlignment="Center"/>
+                        <TextBlock Name="TextBlockDetectTimeFisherface" Text="{Binding DetectionTime}" Margin="5,5" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
             </GroupBox>

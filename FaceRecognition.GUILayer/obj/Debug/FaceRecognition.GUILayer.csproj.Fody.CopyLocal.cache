@@ -1,4 +1,12 @@
+D:\Projects\FaceRecognitionCore\packages\Accord.3.8.0\lib\net46\Accord.dll
+D:\Projects\FaceRecognitionCore\packages\Accord.Imaging.3.8.0\lib\net46\Accord.Imaging.dll
+D:\Projects\FaceRecognitionCore\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.Core.dll
+D:\Projects\FaceRecognitionCore\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.dll
+D:\Projects\FaceRecognitionCore\packages\Accord.Statistics.3.8.0\lib\net46\Accord.Statistics.dll
 D:\Projects\FaceRecognitionCore\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll
+D:\Projects\FaceRecognitionCore\packages\EmguCV.3.1.0.1\lib\net30\Emgu.CV.UI.dll
+D:\Projects\FaceRecognitionCore\packages\EmguCV.3.1.0.1\lib\net30\Emgu.CV.UI.GL.dll
+D:\Projects\FaceRecognitionCore\packages\EmguCV.3.1.0.1\lib\net30\Emgu.CV.World.dll
 D:\Projects\FaceRecognitionCore\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll
 D:\Projects\FaceRecognitionCore\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll
 D:\Projects\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\FaceRecognition.DataLayer.dll
@@ -8,11 +16,22 @@ D:\Projects\FaceRecognitionCore\packages\MahApps.Metro.IconPacks.Modern.2.3.0\li
 C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\Microsoft.Expression.Interactions.dll
 D:\Projects\FaceRecognitionCore\packages\MirzaCryptoHelpersV2.2.3.0\lib\net45\MirzaCryptoHelpersV2.dll
 D:\Projects\FaceRecognitionCore\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll
+D:\Projects\FaceRecognitionCore\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.dll
+D:\Projects\FaceRecognitionCore\packages\OpenTK.GLControl.1.1.2225.0\lib\net20\OpenTK.GLControl.dll
 D:\Projects\FaceRecognitionCore\packages\ControlzEx.3.0.2.4\lib\net45\System.Windows.Interactivity.dll
 D:\Projects\FaceRecognitionCore\packages\WebEye.Controls.Wpf.WebCameraControl.1.0.3\lib\net40\WebEye.Controls.Wpf.WebCameraControl.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\ZedGraph.dll
 D:\Projects\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\FaceRecognition.DataLayer.pdb
 D:\Projects\FaceRecognitionCore\FaceRecognition.DataLayer\bin\Debug\FaceRecognition.DataLayer.dll.config
+D:\Projects\FaceRecognitionCore\packages\Accord.3.8.0\lib\net46\Accord.xml
+D:\Projects\FaceRecognitionCore\packages\Accord.Imaging.3.8.0\lib\net46\Accord.Imaging.xml
+D:\Projects\FaceRecognitionCore\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.xml
+D:\Projects\FaceRecognitionCore\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.Core.xml
+D:\Projects\FaceRecognitionCore\packages\Accord.Statistics.3.8.0\lib\net46\Accord.Statistics.xml
 D:\Projects\FaceRecognitionCore\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.pdb
+D:\Projects\FaceRecognitionCore\packages\EmguCV.3.1.0.1\lib\net30\Emgu.CV.UI.xml
+D:\Projects\FaceRecognitionCore\packages\EmguCV.3.1.0.1\lib\net30\Emgu.CV.UI.GL.xml
+D:\Projects\FaceRecognitionCore\packages\EmguCV.3.1.0.1\lib\net30\Emgu.CV.World.xml
 D:\Projects\FaceRecognitionCore\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.xml
 D:\Projects\FaceRecognitionCore\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.xml
 D:\Projects\FaceRecognitionCore\packages\MahApps.Metro.1.6.5\lib\net46\MahApps.Metro.pdb
@@ -24,7 +43,10 @@ D:\Projects\FaceRecognitionCore\packages\MahApps.Metro.IconPacks.Modern.2.3.0\li
 D:\Projects\FaceRecognitionCore\packages\MirzaCryptoHelpersV2.2.3.0\lib\net45\MirzaCryptoHelpersV2.xml
 D:\Projects\FaceRecognitionCore\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.pdb
 D:\Projects\FaceRecognitionCore\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.xml
+D:\Projects\FaceRecognitionCore\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.xml
+D:\Projects\FaceRecognitionCore\packages\OpenTK.GLControl.1.1.2225.0\lib\net20\OpenTK.GLControl.xml
 D:\Projects\FaceRecognitionCore\packages\WebEye.Controls.Wpf.WebCameraControl.1.0.3\lib\net40\WebEye.Controls.Wpf.WebCameraControl.pdb
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\ZedGraph.xml
 C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\de\Microsoft.Expression.Interactions.resources.dll
 C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\en\Microsoft.Expression.Interactions.resources.dll
 C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\es\Microsoft.Expression.Interactions.resources.dll
@@ -35,3 +57,16 @@ C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Librar
 C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\ru\Microsoft.Expression.Interactions.resources.dll
 C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\zh-Hans\Microsoft.Expression.Interactions.resources.dll
 C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\zh-Hant\Microsoft.Expression.Interactions.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\de\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\es\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\fr\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\hu\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\it\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\ja\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\pt\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\ru\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\sk\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\sv\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\tr\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\zh-cn\ZedGraph.resources.dll
+D:\Projects\FaceRecognitionCore\packages\ZedGraph.5.1.5\lib\zh-tw\ZedGraph.resources.dll

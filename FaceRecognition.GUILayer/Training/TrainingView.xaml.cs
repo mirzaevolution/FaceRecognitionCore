@@ -163,7 +163,7 @@ namespace FaceRecognition.GUILayer.Training
                         WebCamCoreControl.StartCapture(cameraId);
                         ButtonCapture.IsEnabled = true;
                         ButtonInitialize.IsEnabled = false;
-                    }, System.Windows.Threading.DispatcherPriority.Background);
+                    }, System.Windows.Threading.DispatcherPriority.Loaded);
                 });
                 Cursor = null;
                 //ButtonInitialize.IsEnabled = true;

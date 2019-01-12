@@ -11,9 +11,9 @@ false
 DEBUG;TRACE
 D:\Projects\FaceRecognitionCore\FaceRecognition.GUILayer\App.xaml
 10-1267256173
-
-38417825726
-281513885338
+1-370833413
+412043331015
+401261628166
 Authentication\AuthenticationView.xaml;Authentication\Login\LoginView.xaml;Authentication\Register\RegisterView.xaml;Home\HomeView.xaml;Identification\IdentificationView.xaml;MainWindowView.xaml;PreviewFull\PreviewView.xaml;Resources\Icons.xaml;Resources\IconsNonShared.xaml;Training\TrainingView.xaml;
 
 True

@@ -1,0 +1,21 @@
+﻿using System;
+using System.Windows.Data;
+using System.Globalization;
+using System.Windows;
+
+namespace FaceRecognition.GUILayer
+{
+    public class BooleanToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            bool visible = (bool)value;
+            return visible?Visibility.Visible:Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+}

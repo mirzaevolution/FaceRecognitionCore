@@ -19,6 +19,8 @@ using FaceRecognition.GUILayer.Helpers;
 using MahApps.Metro.Controls;
 using System.IO;
 using System.Drawing.Imaging;
+using FaceRecognition.GUILayer.Models;
+
 namespace FaceRecognition.GUILayer.Identification
 {
     /// <summary>
@@ -61,33 +63,36 @@ namespace FaceRecognition.GUILayer.Identification
             {
                 await Task.Run(() =>
                 {
-                    //Dispatcher.Invoke(() =>
-                    //{
-                    //    ListBoxImages.SelectedItem = null;
-                    //    var bitmap = WebCamCoreControl.GetCurrentImage();
-                    //    var repo = DataContext as TrainingViewModel;
+                    Dispatcher.Invoke(() =>
+                    {
+                        var bitmap = WebCamCoreControl.GetCurrentImage();
 
-                    //    if (repo != null)
-                    //    {
-                    //        repo.IsCaptured = true;
-                    //        repo.IsSaved = false;
-                    //        repo.Repository = null;
-                    //        repo.Repository = new Models.RepositoryModel
-                    //        {
-                    //            UserID = Global.LoggedUser.ID,
-                    //            Image = BitmapConversion.BitmapToBitmapSource(bitmap)
-                    //        };
-                    //        using (MemoryStream ms = new MemoryStream())
-                    //        {
-                    //            ms.Position = 0;
-                    //            bitmap.Save(ms, ImageFormat.Png);
-                    //            ms.Position = 0;
-                    //            repo.Repository.SampleImage = ms.ToArray();
-                    //        }
+                        if (DataContext is IdentificationViewModel repo)
+                        {
 
-                    //    }
-                    //});
+                            repo.PreviewImage = new PreviewImageModel
+                            {
+                                Image = BitmapConversion.BitmapToBitmapSource(bitmap)
+                            };
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                ms.Position = 0;
+                                bitmap.Save(ms, ImageFormat.Png);
+                                ms.Position = 0;
+                                repo.PreviewImage.ImageBytes = ms.ToArray();
+                            }
+                            repo.PreviewImageCloned = new PreviewImageModel()
+                            {
+                                Image = repo.PreviewImage.Image.Clone(),
+                                ImageBytes = repo.PreviewImage.ImageBytes.Clone() as byte[]
+                            };
+                        }
+                    }, System.Windows.Threading.DispatcherPriority.Background);
                 });
+                if(DataContext is IdentificationViewModel data)
+                {
+                    data.IsCaptured = true;
+                }
             }
             catch (Exception ex)
             {
@@ -115,9 +120,6 @@ namespace FaceRecognition.GUILayer.Identification
                     }, System.Windows.Threading.DispatcherPriority.Background);
                 });
                 Cursor = null;
-                //ButtonInitialize.IsEnabled = true;
-                //ButtonCapture.IsEnabled = false;
-                //WebCamCoreControl.StopCapture();
             }
             catch (Exception ex)
             {
