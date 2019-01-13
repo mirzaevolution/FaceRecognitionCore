@@ -10,13 +10,14 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>FaceRecognition.GUILayer</RootNamespace>
     <AssemblyName>FaceRecognition.GUILayer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -115,12 +116,18 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="ThumbnailSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ThumbnailSharp.1.0.0\lib\net45\ThumbnailSharp.dll</HintPath>
+    </Reference>
     <Reference Include="WebEye.Controls.Wpf.WebCameraControl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WebEye.Controls.Wpf.WebCameraControl.1.0.3\lib\net40\WebEye.Controls.Wpf.WebCameraControl.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFHexaEditor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFHexaEditor.1.4.0\lib\net47\WPFHexaEditor.dll</HintPath>
+    </Reference>
     <Reference Include="ZedGraph, Version=5.1.5.28844, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
       <HintPath>..\packages\ZedGraph.5.1.5\lib\ZedGraph.dll</HintPath>
     </Reference>
@@ -134,15 +141,27 @@
       <DependentUpon>AuthenticationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="BooleanToVisibilityConverter.cs" />
+    <Compile Include="ChangeProfile\ChangeProfileView.xaml.cs">
+      <DependentUpon>ChangeProfileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ChangeProfile\ChangeProfileViewModel.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Helpers\BitmapConversion.cs" />
     <Compile Include="Helpers\BitmapReader.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
+    <Compile Include="History\HistoryView.xaml.cs">
+      <DependentUpon>HistoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="History\HistoryViewModel.cs" />
     <Compile Include="Home\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Home\HomeViewModel.cs" />
+    <Compile Include="IdentificationDetails\IdentificationDetailsView.xaml.cs">
+      <DependentUpon>IdentificationDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IdentificationDetails\IdentificationDetailsViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Migrations\201901071907166_InitDB.cs" />
     <Compile Include="Migrations\201901071907166_InitDB.Designer.cs">
@@ -152,7 +171,17 @@
     <Compile Include="Migrations\201901100756346_AddDescriptionColumn.Designer.cs">
       <DependentUpon>201901100756346_AddDescriptionColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901131800095_AddDateTimeColumnToHistory.cs" />
+    <Compile Include="Migrations\201901131800095_AddDateTimeColumnToHistory.Designer.cs">
+      <DependentUpon>201901131800095_AddDateTimeColumnToHistory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901131829000_AddMethodColumnToHistory.cs" />
+    <Compile Include="Migrations\201901131829000_AddMethodColumnToHistory.Designer.cs">
+      <DependentUpon>201901131829000_AddMethodColumnToHistory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ChangeUserProfileModel.cs" />
+    <Compile Include="Models\HistoryModel.cs" />
     <Compile Include="Models\LoggedUserModel.cs" />
     <Compile Include="Models\LoginUserModel.cs" />
     <Compile Include="Models\PreviewImageModel.cs" />
@@ -179,7 +208,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ChangeProfile\ChangeProfileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="History\HistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Home\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IdentificationDetails\IdentificationDetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -248,6 +289,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901100756346_AddDescriptionColumn.resx">
       <DependentUpon>201901100756346_AddDescriptionColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901131800095_AddDateTimeColumnToHistory.resx">
+      <DependentUpon>201901131800095_AddDateTimeColumnToHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901131829000_AddMethodColumnToHistory.resx">
+      <DependentUpon>201901131829000_AddMethodColumnToHistory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

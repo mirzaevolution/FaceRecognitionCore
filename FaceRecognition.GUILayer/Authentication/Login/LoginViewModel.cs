@@ -107,7 +107,7 @@ namespace FaceRecognition.GUILayer.Authentication.Login
                             }
                             else
                             {
-                                loggedUser.IsAuthenticated = true;
+                                loggedUser.IsAuthenticated = false;
                             }
                         }
                     }

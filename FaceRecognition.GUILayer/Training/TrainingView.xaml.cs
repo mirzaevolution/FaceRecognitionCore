@@ -19,6 +19,8 @@ using FaceRecognition.GUILayer.Helpers;
 using MahApps.Metro.Controls;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Timers;
+using System.Threading;
 
 namespace FaceRecognition.GUILayer.Training
 {
@@ -27,11 +29,90 @@ namespace FaceRecognition.GUILayer.Training
     /// </summary>
     public partial class TrainingView : UserControl
     {
+        private System.Timers.Timer _timer;
+        private static object _syncLock = new object();
+        private int _counter;
+        private static int COUNTER_MAX = 5;
         public TrainingView()
         {
             InitializeComponent();
             this.Unloaded += UnloadedHandler;
+            _timer = new System.Timers.Timer
+            {
+                Interval = 1500
+            };
+            _timer.Elapsed += TimerElapsedHandler;
             InitializeComboBox();
+            
+        }
+
+        private async void TimerElapsedHandler(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+
+                Dispatcher.Invoke(() => TextCounter.Text = (_counter).ToString());
+
+
+                await Task.Run(() =>
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        var bitmap = WebCamCoreControl.GetCurrentImage();
+
+                        if (DataContext is TrainingViewModel repo)
+                        {
+
+                            Random random = new Random();
+                            var newData = new Models.RepositoryModel
+                            {
+                                UserID = Global.LoggedUser.ID,
+                                Image = BitmapConversion.BitmapToBitmapSource(bitmap),
+                                Description = $"Capture #{random.Next(1000000, 10000001)}"
+                            };
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                ms.Position = 0;
+                                bitmap.Save(ms, ImageFormat.Png);
+                                ms.Position = 0;
+                                newData.SampleImage = ms.ToArray();
+                            }
+                            repo.MultiCaptureStorages.Add(newData);
+                        }
+                    },System.Windows.Threading.DispatcherPriority.Background);
+                    lock (_syncLock)
+                    {
+                        if (_counter < COUNTER_MAX)
+                        {
+                            Interlocked.Increment(ref _counter);
+                        }
+                        else
+                        {
+                            _timer.Stop();
+                            _counter = 0;
+                            Dispatcher.Invoke(() =>
+                            {
+                                if (DataContext is TrainingViewModel repo)
+                                {
+                                    repo.AddMultiples();
+                                }
+                                ListBoxImages.IsEnabled = true;
+                                WrapPanelButtons.IsEnabled = true;
+                                ButtonCapture.IsEnabled = true;
+                                ButtonMultiCapture.IsEnabled = true;
+
+                                ImagePreview.Visibility = Visibility.Visible;
+                                TextCounter.Visibility = Visibility.Collapsed;
+                            }, System.Windows.Threading.DispatcherPriority.Background);
+                        }
+                    }
+                });
+              
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogException(new string[] { ex.Message });
+            }
         }
 
         private void UnloadedHandler(object sender, RoutedEventArgs e)
@@ -173,6 +254,25 @@ namespace FaceRecognition.GUILayer.Training
             catch(Exception ex)
             {
                 LogHelper.LogException(new string[] { ex.ToString() });
+            }
+        }
+
+        private void ButtonMultiCaptureHandler(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is TrainingViewModel repo)
+            {
+                repo.Repository = null;
+                ListBoxImages.SelectedItem = null;
+                ListBoxImages.IsEnabled = false;
+                WrapPanelButtons.IsEnabled = false;
+                ButtonCapture.IsEnabled = false;
+                ButtonMultiCapture.IsEnabled = false;
+                repo.MultiCaptureStorages.Clear();
+                ImagePreview.Visibility = Visibility.Collapsed;
+                TextCounter.Visibility = Visibility.Visible;
+                _counter = 1;
+                TextCounter.Text = _counter.ToString();
+                _timer.Start();
             }
         }
     }

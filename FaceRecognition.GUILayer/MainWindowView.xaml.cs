@@ -1,4 +1,5 @@
-﻿using FaceRecognition.GUILayer.Models;
+﻿using FaceRecognition.GUILayer.ChangeProfile;
+using FaceRecognition.GUILayer.Models;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
@@ -26,6 +27,7 @@ namespace FaceRecognition.GUILayer
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
         private void ResizeScreenHandler(object sender, Tuple<double,double> e)
@@ -55,6 +57,12 @@ namespace FaceRecognition.GUILayer
             Global.LoggedUser = null;
             new Authentication.AuthenticationView().Show();
             this.Close();
+        }
+
+        private void UpdateProfileHandler(object sender, RoutedEventArgs e)
+        {
+            ChangeProfileView view = new ChangeProfileView();
+            view.ShowDialog();
         }
     }
 }

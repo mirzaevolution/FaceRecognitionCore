@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:FaceRecognition.GUILayer" mc:Ignorable="d" 
         xmlns:home="clr-namespace:FaceRecognition.GUILayer.Home"
         xmlns:training="clr-namespace:FaceRecognition.GUILayer.Training"
+        xmlns:history="clr-namespace:FaceRecognition.GUILayer.History"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:identification="clr-namespace:FaceRecognition.GUILayer.Identification"
         GlowBrush="Red" Icon="/Resources/Icons/main.ico"
@@ -23,6 +24,14 @@
                     <iconPacks:MaterialLight Kind="Logout"/>
                 </Grid>
             </Button>
+            <Button Name="ButtonUpdateProfile" Click="UpdateProfileHandler" Cursor="Hand" ToolTip="Update Profile">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <iconPacks:PackIconFontAwesome Kind="UserEditSolid"/>
+                </Grid>
+            </Button>
         </control:WindowCommands>
     </control:MetroWindow.RightWindowCommands>
     <control:MetroWindow.Resources>
@@ -34,6 +43,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type identification:IdentificationViewModel}">
             <identification:IdentificationView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type history:HistoryViewModel}">
+            <history:HistoryView/>
         </DataTemplate>
     </control:MetroWindow.Resources>
     <control:MetroWindow.DataContext>

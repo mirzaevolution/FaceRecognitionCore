@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using FaceRecognition.GUILayer.Models;
+using FaceRecognition.GUILayer.IdentificationDetails;
+using FaceRecognition.GUILayer.History;
 
 namespace FaceRecognition.GUILayer
 {
@@ -19,6 +21,7 @@ namespace FaceRecognition.GUILayer
         private bool _isVisible;
         private TrainingViewModel _trainingViewModel = new TrainingViewModel();
         private IdentificationViewModel _identificationViewModel = new IdentificationViewModel();
+        private HistoryViewModel _historyViewModel = new HistoryViewModel();
         private HomeViewModel _homeViewModel = new HomeViewModel();
         public event EventHandler<Tuple<double, double>> ResizeScreenRequested;
         public event Action<string> ErrorOccured;
@@ -51,18 +54,56 @@ namespace FaceRecognition.GUILayer
         {
             _homeViewModel.GoToIdentificationViewRequested += GoToIdentificationHandler;
             _homeViewModel.GoToTrainingViewRequested += GoToTrainingHandler;
+            _homeViewModel.GoToHistoryViewRequested += GoToHistoryHandler;
+
             _trainingViewModel.BackToMainRequested += BackToMainHandler;
             _trainingViewModel.PreviewImageRequested += PreviewImageHandler;
             _trainingViewModel.ErrorOccured += ErrorInfoHandler;
             _trainingViewModel.Information += InformationHandler;
+
             _identificationViewModel.BackToMainRequested += BackToMainHandler;
             _identificationViewModel.ErrorOccured += ErrorInfoHandler;
             _identificationViewModel.Information += InformationHandler;
+            _identificationViewModel.IdentificationDetailsRequested += IdentificationDetailsHandler;
+
+            _historyViewModel.BackToMainRequested += BackToMainHandler;
+            _historyViewModel.ErrorOccured += ErrorInfoHandler;
+            _historyViewModel.Information += InformationHandler;
+            
+
             CurrentView = _homeViewModel;
             IsVisible = false;
         }
 
+        private void GoToHistoryHandler(object sender, EventArgs e)
+        {
+            ResizeScreenRequested?.Invoke(this, new Tuple<double, double>(950, 550));
+            IsVisible = true;
+            CurrentView = _historyViewModel;
+        }
 
+        private void IdentificationDetailsHandler(PreviewImageModel previewImage, RepoResultModel eigenfaceResult, RepoResultModel fisherfaceResult)
+        {
+            IdentificationDetailsViewModel viewModel = new IdentificationDetailsViewModel
+            {
+                PreviewImage = previewImage,
+                EigenfaceResult = eigenfaceResult,
+                FisherfaceResult = fisherfaceResult
+            };
+            IdentificationDetailsView view = new IdentificationDetailsView
+            {
+                DataContext = viewModel
+            };
+            view.ImagePreview.Source = viewModel.PreviewImage.Image;
+            view.ImageEigenface.Source = viewModel.EigenfaceResult.Image;
+            view.ImageFisherface.Source = viewModel.FisherfaceResult.Image;
+
+            view.HexPreview.Stream = viewModel.PreviewImage.MemoryStream;
+            view.HexEigenface.Stream = viewModel.EigenfaceResult.MemoryStream;
+            view.HexFisherface.Stream = viewModel.FisherfaceResult.MemoryStream;
+
+            view.ShowDialog();
+        }
 
         private void InformationHandler(string obj)
         {
@@ -77,13 +118,14 @@ namespace FaceRecognition.GUILayer
         private void PreviewImageHandler(object sender, BitmapSource e)
         {
             PreviewView previewView = new PreviewView();
+            
             previewView.SetImage(e);
             previewView.ShowDialog();
         }
 
         private void BackToMainHandler(object sender, EventArgs e)
         {
-            ResizeScreenRequested?.Invoke(this, new Tuple<double, double>(390.387, 400.807));
+            ResizeScreenRequested?.Invoke(this, new Tuple<double, double>(584.5,400));
             IsVisible = false;
             CurrentView = _homeViewModel;
         }

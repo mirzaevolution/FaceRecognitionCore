@@ -20,7 +20,7 @@ namespace FaceRecognition.GUILayer.Training
 
     public class TrainingViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<RepositoryModel> _repositories;
+        private ObservableCollection<RepositoryModel> _repositories,_multiCaptureStorages;
         private bool _isLoading, _isEnabled, _isCaptured, _isSaved;
         private RepositoryModel _repository = null;
         public event EventHandler BackToMainRequested;
@@ -36,6 +36,18 @@ namespace FaceRecognition.GUILayer.Training
                 {
                     _repositories = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Repositories)));
+                }
+            }
+        }
+        public ObservableCollection<RepositoryModel> MultiCaptureStorages
+        {
+            get { return _multiCaptureStorages; }
+            set
+            {
+                if (_multiCaptureStorages != value)
+                {
+                    _multiCaptureStorages = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MultiCaptureStorages)));
                 }
             }
         }
@@ -125,6 +137,7 @@ namespace FaceRecognition.GUILayer.Training
                 });
                 if (listFromDb != null && listFromDb.Count > 0)
                 {
+                    Repositories.Clear();
                     foreach (var item in listFromDb)
                     {
 
@@ -142,6 +155,7 @@ namespace FaceRecognition.GUILayer.Training
 
                         Repositories.Add(model);
                     }
+                    
 
                 }
                 Information?.Invoke("Data loaded successfully.");
@@ -164,6 +178,7 @@ namespace FaceRecognition.GUILayer.Training
             IsEnabled = true;
             IsLoading = false;
             Repositories = new ObservableCollection<RepositoryModel>();
+            MultiCaptureStorages = new ObservableCollection<RepositoryModel>();
             SaveCommand = new RelayCommand(SaveHandler, CanSaveHandler);
             CancelCommand = new RelayCommand(CancelHandler, CanCancelHandler);
             DeleteCommand = new RelayCommand(DeleteHandler, CanDeleteHandler);
@@ -289,7 +304,65 @@ namespace FaceRecognition.GUILayer.Training
             return Repository != null;
         }
 
-
+        public async void AddMultiples()
+        {
+            var id = Global.LoggedUser.ID;
+           
+            Information?.Invoke("Adding image(s) to database...");
+            bool success = true;
+            string error = "";
+            try
+            {
+                using (CoreContext context = new CoreContext())
+                {
+                    var user = context.Users.FirstOrDefault(x => x.ID == id);
+                    if (user != null)
+                    {
+                        foreach(var item in MultiCaptureStorages)
+                        {
+                            Repository repository = new DataLayer.Models.Repository
+                            {
+                                UserID = id,
+                                SampleImage = item.SampleImage,
+                                Description = item.Description
+                            };
+                            user.Repositories.Add(repository);
+                            await context.SaveChangesAsync();
+                            var repoItem = new RepositoryModel
+                            {
+                                ID = repository.ID,
+                                Description = item.Description,
+                                SampleImage = item.SampleImage,
+                                UserID = repository.UserID
+                            };
+                            BitmapImage image = BitmapReader.Read(item.SampleImage);
+                            Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
+                            BitmapSource bitmapSource = BitmapConversion.BitmapToBitmapSource(bitmap);
+                            repoItem.Image = bitmapSource;
+                            Repositories.Add(repoItem);
+                        }
+                    }
+                    else
+                    {
+                        error = "Current user is invalid";
+                        success = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                success = false;
+            }
+            if (success)
+            {
+                Information?.Invoke("Images have been added to database");
+            }
+            else
+            {
+                ErrorOccured?.Invoke(error);
+            }
+        }
         private async void Add()
         {
             var id = Global.LoggedUser.ID;
@@ -341,6 +414,10 @@ namespace FaceRecognition.GUILayer.Training
             {
 
                 Repositories.Add(item);
+            }
+            else
+            {
+                success = false;
             }
             if (success)
             {

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Windows.Media.Imaging;
 
 namespace FaceRecognition.GUILayer.Models
@@ -6,7 +7,8 @@ namespace FaceRecognition.GUILayer.Models
     public class RepoResultModel : INotifyPropertyChanged
     {
         private int _id;
-        private string _fullName, _description, _detectionTime;
+        private string _fullName, _description, _detectionTime, _distance, _resolution, _size;
+        private MemoryStream _memoryStream;
         private byte[] _imageBytes;
         private BitmapSource _image;
         public int ID
@@ -57,6 +59,55 @@ namespace FaceRecognition.GUILayer.Models
                 }
             }
         }
+        public string Distance
+        {
+            get { return _distance; }
+            set
+            {
+                if (_distance != value)
+                {
+                    _distance = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Distance)));
+                }
+            }
+        }
+        public string Resolution
+        {
+            get { return _resolution; }
+            set
+            {
+                if (_resolution != value)
+                {
+                    _resolution = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Resolution)));
+                }
+            }
+        }
+        public string Size
+        {
+            get { return _size; }
+            set
+            {
+                if (_size != value)
+                {
+                    _size = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Size)));
+                }
+            }
+        }
+        public MemoryStream MemoryStream
+        {
+            get { return _memoryStream; }
+            set
+            {
+                if (_memoryStream != value)
+                {
+                    _memoryStream = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MemoryStream)));
+                }
+            }
+        }
+
         public byte[] ImageBytes
         {
             get { return _imageBytes; }

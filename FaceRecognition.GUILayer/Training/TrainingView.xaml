@@ -39,7 +39,9 @@
                     <RowDefinition/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <wpf:WebCameraControl x:Name="WebCamCoreControl" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10"/>
+                <Border BorderBrush="Red" BorderThickness="1.5" Margin="10">
+                    <wpf:WebCameraControl x:Name="WebCamCoreControl" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                </Border>
                 <StackPanel Grid.Row="1">
                     <ComboBox x:Name="ComboBoxDevices" DisplayMemberPath="Name" Width="300" Margin="10" SelectionChanged="ComboBoxDevicesSelectionChangedHandler"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -49,6 +51,9 @@
                         <Button x:Name="ButtonCapture" Margin="3" Width="80" Click="ButtonCaptureHandler"
                             Content="Capture" control:ButtonHelper.CornerRadius="10"
                             HorizontalAlignment="Center" BorderBrush="Red" IsEnabled="False"/>
+                        <Button x:Name="ButtonMultiCapture" Margin="3" Width="120" Click="ButtonMultiCaptureHandler"
+                            Content="Multi Capture" control:ButtonHelper.CornerRadius="10"
+                            HorizontalAlignment="Center" BorderBrush="Red" IsEnabled="True"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -58,9 +63,14 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Image Source="{Binding Image}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Grid.Row="0"/>
+                <Border BorderBrush="Red" BorderThickness="1.5" Margin="5">
+                    <Image Name="ImagePreview" Source="{Binding Image}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Grid.Row="0"/>
+                    
+                </Border>
+                <TextBlock Name="TextCounter" Text="1" FontSize="50" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent"
+                               Foreground="White" Visibility="Collapsed"/>
                 <TextBox Text="{Binding Description,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="20,5" control:TextBoxHelper.Watermark="Enter short description" control:TextBoxHelper.ClearTextButton="True" Grid.Row="1"/>
-                <WrapPanel Orientation="Horizontal" Grid.Row="2"
+                <WrapPanel Orientation="Horizontal" Grid.Row="2" Name="WrapPanelButtons"
                             DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="7,10,7.4,0" 
                             IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=IsEnabled}">
                     <Button Content="Save" Command="{Binding DataContext.SaveCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Height="30"

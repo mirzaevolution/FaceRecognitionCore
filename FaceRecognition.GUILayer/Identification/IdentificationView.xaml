@@ -89,10 +89,12 @@
                         <TextBlock Text="Full Name:" Margin="5,3"/>
                         <TextBox Name="TextBoxFullNameEigenface" Text="{Binding FullName}" Margin="5,3" IsReadOnly="True"/>
 
-                        <TextBlock Text="Descripition:" Margin="5,3"/>
+                        <TextBlock Text="Description:" Margin="5,3"/>
                         <TextBox Name="TextBoxDescEigenface"  Text="{Binding Description}" Margin="5,3" IsReadOnly="True"/>
 
                         <TextBlock Name="TextBlockDetectTimeEigenface" Text="{Binding DetectionTime}" Margin="5,5" VerticalAlignment="Center"/>
+                        <TextBlock Name="TextBlockDistanceEigenface" Text="{Binding Distance}" Margin="5,5" VerticalAlignment="Center"/>
+
                     </StackPanel>
                 </Grid>
             </GroupBox>
@@ -101,7 +103,7 @@
                 <Button Content="Identify" control:ButtonHelper.CornerRadius="80" Width="80" Height="80"
                         BorderBrush="Red" BorderThickness="2" Cursor="Hand" Margin="5"
                         Command="{Binding IdentifyCommand}"/>
-                <Button Content="Calc Detail" control:ButtonHelper.CornerRadius="80" Width="80" Height="80"
+                <Button Content="Info Details" control:ButtonHelper.CornerRadius="80" Width="80" Height="80"
                         BorderBrush="Red" BorderThickness="2" Cursor="Hand" Margin="5"
                         Command="{Binding CalculationDetailCommand}"/>
                
@@ -119,10 +121,12 @@
                         <TextBlock Text="Full Name:" Margin="5,3"/>
                         <TextBox Name="TextBoxFullNameFisherface" Text="{Binding FullName}" Margin="5,3" IsReadOnly="True"/>
 
-                        <TextBlock Text="Descripition:" Margin="5,3"/>
+                        <TextBlock Text="Description:" Margin="5,3"/>
                         <TextBox Name="TextBoxDescFisherface"  Text="{Binding Description}" Margin="5,3" IsReadOnly="True"/>
 
                         <TextBlock Name="TextBlockDetectTimeFisherface" Text="{Binding DetectionTime}" Margin="5,5" VerticalAlignment="Center"/>
+                        <TextBlock Name="TextBlockDistanceFisherface" Text="{Binding Distance}" Margin="5,5" VerticalAlignment="Center"/>
+
                     </StackPanel>
                 </Grid>
             </GroupBox>

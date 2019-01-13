@@ -68,7 +68,6 @@ namespace FaceRecognition.GUILayer.Authentication
         {
             if (e.IsAuthenticated)
             {
-                
                 ExitAppRequested?.Invoke(this, e);
             }
             else

@@ -156,6 +156,7 @@ namespace FaceRecognition.GUILayer.Identification
         public event Action<string> Information;
         public event Action<string> ErrorOccured;
         public event PropertyChangedEventHandler PropertyChanged;
+        public event Action<PreviewImageModel,RepoResultModel,RepoResultModel> IdentificationDetailsRequested;
 
         public IdentificationViewModel()
         {
@@ -171,14 +172,13 @@ namespace FaceRecognition.GUILayer.Identification
             IsInProgress = true;
             try
             {
-                var id = Global.LoggedUser.ID;
                 List<Repository> listFromDb = new List<Repository>();
                 await Task.Run(() =>
                 {
 
                     using (CoreContext context = new CoreContext())
                     {
-                        listFromDb = context.Repositories.Where(x => x.UserID == id).ToList();
+                        listFromDb = context.Repositories.ToList();
                     }
                 });
                 if (listFromDb != null && listFromDb.Count > 0)
@@ -198,6 +198,7 @@ namespace FaceRecognition.GUILayer.Identification
                         };
                         BitmapImage image = BitmapReader.Read(item.SampleImage);
                         Bitmap bitmap = BitmapConversion.BitmapImageToBitmap(image);
+                        
                         model.Image = BitmapConversion.BitmapToBitmapSource(bitmap);
                         
                         faceImages[i] = new Image<Gray, byte>(new Bitmap(bitmap)).Resize(100, 100, Inter.Cubic);
@@ -207,7 +208,8 @@ namespace FaceRecognition.GUILayer.Identification
                     }
                     _eigenfaceRecognizer.Train(faceImages, faceLabels);
                     _fisherfaceRecognizer.Train(faceImages, faceLabels);
-                   
+                    _eigenfaceRecognizer.Save("eigenface.txt");
+                    _fisherfaceRecognizer.Save("fisherface.txt");
 
                     Information?.Invoke("Data loaded successfully.");
 
@@ -264,7 +266,7 @@ namespace FaceRecognition.GUILayer.Identification
             return !_isInProgress && PreviewImage != null;
         }
 
-        private void IdentifyHandler()
+        private async void IdentifyHandler()
         {
             IsInProgress = true;
             bool success = true;
@@ -277,6 +279,9 @@ namespace FaceRecognition.GUILayer.Identification
                 PredictionResult predictionResultFisherFace = new PredictionResult();
                 string detectionTimeEigenface = string.Empty;
                 string detectionTimeFisherface = string.Empty;
+                var userID = Global.LoggedUser.ID;
+                string distanceEigenface = string.Empty;
+                string distanceFisherface = string.Empty;
 
                 Image<Gray, byte> visual = null;
                 try
@@ -286,60 +291,145 @@ namespace FaceRecognition.GUILayer.Identification
 
                     MemoryStream ms = new MemoryStream();
                     ms.Write(imageBytes, 0, imageBytes.Length);
+                    MemoryStream ms2 = new MemoryStream();
+                    ms.CopyTo(ms2);
+                    PreviewImage.MemoryStream = ms;
                     Bitmap bitmap = new Bitmap(ms);
                     visual = new Image<Gray, byte>(bitmap).Resize(100, 100, Inter.Cubic);
+                    PreviewImage.Resolution = $"{bitmap.Width} x {bitmap.Height}";
+                    PreviewImage.Size = $"{ms.Length.ToString("N0")} bytes";
+
+                    
 
                     stopwatchEigenface.Start();
                     predictionResultEigenface = _eigenfaceRecognizer.Predict(visual);
+         
                     stopwatchEigenface.Stop();
 
                     stopwatchFisherface.Start();
                     predictionResultFisherFace = _fisherfaceRecognizer.Predict(visual);
                     stopwatchFisherface.Stop();
 
+
                     detectionTimeEigenface = $"Detection time: {stopwatchEigenface.Elapsed.Milliseconds} ms";
                     detectionTimeFisherface = $"Detection time: {stopwatchFisherface.Elapsed.Milliseconds} ms";
 
+                    distanceEigenface = $"Distance: {predictionResultEigenface.Distance.ToString("N2")}";
+                    distanceFisherface = $"Distance: {predictionResultFisherFace.Distance.ToString("N2")}";
 
                     RepositoryModel repoEigenface = Repositories.FirstOrDefault(x => x.ID == predictionResultEigenface.Label);
                     RepositoryModel repoFisherface = Repositories.FirstOrDefault(x => x.ID == predictionResultFisherFace.Label);
-
+                    DateTime now = DateTime.Now;
                     if (repoEigenface != null)
                     {
-                        EigenfaceResult = new RepoResultModel()
+                        if (predictionResultEigenface.Distance <= 3000)
                         {
-                            DetectionTime = detectionTimeEigenface,
-                            Description = repoEigenface.Description,
-                            ID = repoEigenface.ID,
-                            Image = repoEigenface.Image,
-                            ImageBytes = repoEigenface.SampleImage
-                        };
-                        using (CoreContext context = new CoreContext())
-                        {
-                            var user = context.Users.FirstOrDefault(x => x.ID == repoEigenface.UserID);
-                            if (user != null)
+                            
+                            EigenfaceResult = new RepoResultModel()
                             {
-                                EigenfaceResult.FullName = user.FullName;
+                                DetectionTime = detectionTimeEigenface,
+                                Description = repoEigenface.Description,
+                                ID = repoEigenface.ID,
+                                Image = repoEigenface.Image,
+                                ImageBytes = repoEigenface.SampleImage,
+                                Distance = distanceEigenface
+                            };
+                            MemoryStream eigenfaceMs = new MemoryStream();
+                            eigenfaceMs.Write(EigenfaceResult.ImageBytes, 0, EigenfaceResult.ImageBytes.Length);
+                            EigenfaceResult.MemoryStream = eigenfaceMs;
+                            EigenfaceResult.Size = eigenfaceMs.Length + " bytes";
+                            EigenfaceResult.Resolution = $"{EigenfaceResult.Image.Width} x {EigenfaceResult.Image.Height}";
+                            
+
+                            using (CoreContext context = new CoreContext())
+                            {
+                                var user = context.Users.FirstOrDefault(x => x.ID == repoEigenface.UserID);
+                                if (user != null)
+                                {
+                                    EigenfaceResult.FullName = user.FullName;
+                                }
+                                user.Histories.Add(new DataLayer.Models.History
+                                {
+                                    CapturedImage = EigenfaceResult.ImageBytes,
+                                    DateTime = now,
+                                    DetectionTime = EigenfaceResult.DetectionTime,
+                                    Distance = EigenfaceResult.Distance,
+                                    SampleImage = PreviewImage.ImageBytes,
+                                    UserID = userID,
+                                    Method = "Eigenface"
+                                });
+                                await context.SaveChangesAsync();
                             }
                         }
+                        else
+                        {
+                            EigenfaceResult = new RepoResultModel
+                            {
+                                DetectionTime = string.Empty,
+                                Description = "Not Found",
+                                ID = 0,
+                                Distance = string.Empty,
+                                FullName = "Not Found"
+                            };
+                            BitmapImage image = new BitmapImage(new Uri("/Resources/not-found.png", UriKind.Relative));
+                            EigenfaceResult.Image = image;
+                        }
+
+                       
                     }
                     if(repoFisherface!=null)
                     {
-                        FisherfaceResult = new RepoResultModel()
+                        if (predictionResultFisherFace.Distance <= 3000)
                         {
-                            DetectionTime = detectionTimeEigenface,
-                            Description = repoFisherface.Description,
-                            ID = repoFisherface.ID,
-                            Image = repoFisherface.Image,
-                            ImageBytes = repoFisherface.SampleImage
-                        };
-                        using (CoreContext context = new CoreContext())
-                        {
-                            var user = context.Users.FirstOrDefault(x => x.ID == repoFisherface.UserID);
-                            if (user != null)
+                            FisherfaceResult = new RepoResultModel()
                             {
-                                FisherfaceResult.FullName = user.FullName;
+                                DetectionTime = detectionTimeEigenface,
+                                Description = repoFisherface.Description,
+                                ID = repoFisherface.ID,
+                                Image = repoFisherface.Image,
+                                ImageBytes = repoFisherface.SampleImage,
+                                Distance = distanceFisherface
+                            };
+                            MemoryStream fisherfaceMs = new MemoryStream();
+                            fisherfaceMs.Write(FisherfaceResult.ImageBytes, 0, FisherfaceResult.ImageBytes.Length);
+                            FisherfaceResult.MemoryStream = fisherfaceMs;
+                            FisherfaceResult.Size = fisherfaceMs.Length + " bytes";
+                            FisherfaceResult.Resolution = $"{FisherfaceResult.Image.Width} x {FisherfaceResult.Image.Height}";
+
+
+                            using (CoreContext context = new CoreContext())
+                            {
+                                var user = context.Users.FirstOrDefault(x => x.ID == repoFisherface.UserID);
+                                if (user != null)
+                                {
+                                    FisherfaceResult.FullName = user.FullName;
+                                }
+                                user.Histories.Add(new DataLayer.Models.History
+                                {
+                                    CapturedImage = FisherfaceResult.ImageBytes,
+                                    DateTime = now,
+                                    DetectionTime = FisherfaceResult.DetectionTime,
+                                    Distance = FisherfaceResult.Distance,
+                                    SampleImage = PreviewImage.ImageBytes,
+                                    UserID = userID,
+                                    Method = "Fisherface"
+                                });
+                                await context.SaveChangesAsync();
                             }
+
+                        }
+                        else
+                        {
+                            FisherfaceResult = new RepoResultModel
+                            {
+                                DetectionTime = string.Empty,
+                                Description = "Not Found",
+                                ID = 0,
+                                Distance = string.Empty,
+                                FullName = "Not Found"
+                            };
+                            BitmapImage image = new BitmapImage(new Uri("/Resources/not-found.png", UriKind.Relative));
+                            FisherfaceResult.Image = image;
                         }
                     }
 
@@ -377,11 +467,11 @@ namespace FaceRecognition.GUILayer.Identification
 
         private void CalculateDetailHandler()
         {
-           
+            IdentificationDetailsRequested?.Invoke(PreviewImage, EigenfaceResult, FisherfaceResult);
         }
         private bool CanCalculateDetailHandler()
         {
-            return ((EigenfaceResult != null) && (FisherfaceResult != null) && !_isInProgress);
+            return ((PreviewImage!=null) && (EigenfaceResult != null) && (FisherfaceResult != null) && !_isInProgress);
         }
         private void BackToMainHandler()
         {
